@@ -1,3 +1,5 @@
+# Git dotfile
+
 ```sh
 alias gc='git checkout'
 alias gcdev='git checkout develop'
