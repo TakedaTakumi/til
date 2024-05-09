@@ -38,3 +38,7 @@ compose down のときにimageやvolumeも含めて削除する。
 ```sh
 docker compose down --rmi all --volumes --remove-orphans
 ```
+
+## 環境変数が無いときにエラーを出す
+
+
