@@ -6,18 +6,18 @@ export class Result<T, E extends Error> {
     return new Result<T, Error>(value);
   }
 
-  static failure<E extends Error>(error: E): Result<any, E> {
-    return new Result<any, E>(error);
+  static failure<E extends Error>(error: E): Result<unknown, E> {
+    return new Result<unknown, E>(error);
   }
 
-  protected readonly value: T | E;
+  private readonly value: T | E;
 
-  protected constructor(value: T | E) {
+  private constructor(value: T | E) {
     this.value = value;
   }
 
   get isSuccess(): boolean {
-    return !(this.value instanceof Error);
+    return this.value instanceof T;
   }
   get isFailure(): boolean {
     return this.value instanceof Error;
@@ -41,7 +41,7 @@ export class Result<T, E extends Error> {
     return this.value;
   }
 
-  which<R>(branch: { success: (data: T) => R; failure: (error: E) => R }): R {
+  match<R>(branch: { success: (data: T) => R; failure: (error: E) => R }): R {
     if (this.value instanceof Error) {
       return branch.failure(this.value);
     } else {
@@ -49,7 +49,7 @@ export class Result<T, E extends Error> {
     }
   }
 
-  async whichAsync<R>(branch: {
+  async matchAsync<R>(branch: {
     success: (data: T) => Promise<R>;
     failure: (error: E) => Promise<R>;
   }): Promise<R> {
