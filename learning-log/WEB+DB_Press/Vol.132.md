@@ -12,8 +12,8 @@
 
 |  |  |  |  |  |
 | ---- | ---- | ---- | ---- | ---- |
-| <ul><li>[ ] 13</li></ul> | <ul><li>[ ] 14</li></ul> | <ul><li>[ ] 15</li></ul> | <ul><li>[ ] 16</li></ul> | <ul><li>[ ] 17</li></ul> |
-| <ul><li>[ ] 18</li></ul> | <ul><li>[ ] 19</li></ul> | <ul><li>[ ] 20</li></ul> | <ul><li>[ ] 21</li></ul> | <ul><li>[ ] 22</li></ul> |
+| <ul><li>[x] 13</li></ul> | <ul><li>[x] 14</li></ul> | <ul><li>[x] 15</li></ul> | <ul><li>[x] 16</li></ul> | <ul><li>[x] 17</li></ul> |
+| <ul><li>[x] 18</li></ul> | <ul><li>[x] 19</li></ul> | <ul><li>[x] 20</li></ul> | <ul><li>[x] 21</li></ul> | <ul><li>[x] 22</li></ul> |
 
 ### 第3章：オブジェクト指向の周辺技術
 
