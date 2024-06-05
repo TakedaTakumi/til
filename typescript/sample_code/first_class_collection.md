@@ -24,22 +24,24 @@ export class FirstClassCollection<T> {
     return [...this.list];
   }
 
-  forEach(callback: (item: T, idx?: number) => void): void {
+  forEach(callback: (item: T, idx?: number, array?: T[]) => void): void {
     this.list.forEach(callback);
   }
-  map<U>(callback: (item: T, idx?: number) => U): U[] {
+  map<U>(callback: (item: T, idx?: number, array?: T[]) => U): U[] {
     return this.list.map(callback);
   }
-  filter(callback: (item: T, idx?: number) => boolean): T[] {
+  filter(callback: (item: T, idx?: number, array?: T[]) => boolean): T[] {
     return this.list.filter(callback);
   }
-  find(callback: (item: T, idx?: number) => boolean): T | undefined {
+  find(
+    callback: (item: T, idx?: number, array?: T[]) => boolean,
+  ): T | undefined {
     return this.list.find(callback);
   }
-  some(callback: (item: T, idx?: number) => boolean): boolean {
+  some(callback: (item: T, idx?: number, array?: T[]) => boolean): boolean {
     return this.list.some(callback);
   }
-  every(callback: (item: T, idx?: number) => boolean): boolean {
+  every(callback: (item: T, idx?: number, array?: T[]) => boolean): boolean {
     return this.list.every(callback);
   }
 }
