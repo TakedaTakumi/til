@@ -6,8 +6,8 @@ export class Result<T, E extends Error> {
     return new Result<T, Error>(value);
   }
 
-  static failure<E extends Error>(error: E): Result<unknown, E> {
-    return new Result<unknown, E>(error);
+  static failure<E extends Error>(error: E): Result<any, E> {
+    return new Result<any, E>(error);
   }
 
   private readonly value: T | E;
@@ -16,11 +16,11 @@ export class Result<T, E extends Error> {
     this.value = value;
   }
 
-  get isSuccess(): boolean {
-    return this.value instanceof T;
-  }
   get isFailure(): boolean {
     return this.value instanceof Error;
+  }
+  get isSuccess(): boolean {
+    return this.isFailure === false;
   }
 
   unwrap(): T | E {
@@ -28,17 +28,17 @@ export class Result<T, E extends Error> {
   }
   unwrap_as_success(): T {
     if (this.value instanceof Error) {
-      throw new Error('unwrap_as_success called on failure result');
+      assert('unwrap_as_success called on failure result');
     }
 
-    return this.value;
+    return this.value as T;
   }
   unwrap_as_failure(): E {
     if (!(this.value instanceof Error)) {
-      throw new Error('unwrap_as_failure called on success result');
+      assert('unwrap_as_failure called on success result');
     }
 
-    return this.value;
+    return this.value as E;
   }
 
   match<R>(branch: { success: (data: T) => R; failure: (error: E) => R }): R {
