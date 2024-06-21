@@ -30,3 +30,24 @@ export abstract class BaseValueObject<T> {
   }
 }
 ```
+
+バリデーション失敗時に例外を投げるようにすれば、Result型を使わずに実装することもできる。
+```typescript
+export abstract class BaseValueObject<T> {
+  protected _value!: T;
+
+  protected abstract validate(value: T): T;
+
+  constructor(value: T) {
+    this._value = this.validate(value);
+  }
+
+  get value(): T {
+    return this._value;
+  }
+
+  equals(name: BaseValueObject<T>): boolean {
+    return this._value === name.value;
+  }
+}
+```
