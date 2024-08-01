@@ -1,0 +1,15 @@
+{
+  "NestJS Controller": {
+    "scope": "typescript",
+    "prefix": "controller",
+    "body": [
+      "import { ApiTags } from '@nestjs/swagger';",
+      "import { Controller } from '@nestjs/common';",
+      "",
+      "@ApiTags('$1')",
+      "@Controller('$2')",
+      "export class $3Controller {}",
+    ],
+    "description": "NestJSのコントローラーを作成します。",
+  },
+}
