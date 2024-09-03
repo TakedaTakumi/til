@@ -20,7 +20,7 @@ export class FirstClassCollection<T> {
     return this.list[idx];
   }
 
-  cloneList(): T[] {
+  toList(): T[] {
     return [...this.list];
   }
 
