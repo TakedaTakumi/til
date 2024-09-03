@@ -40,6 +40,13 @@ export class Result<T, E extends Error> {
 
     return this.value as E;
   }
+  unwrap_or_throw(): T {
+    if (this.isFailure) {
+      throw this.unwrap_as_failure();
+    }
+
+    return this.unwrap_as_success();
+  }
 
   match<R>(branch: { success: (data: T) => R; failure: (error: E) => R }): R {
     if (this.value instanceof Error) {
