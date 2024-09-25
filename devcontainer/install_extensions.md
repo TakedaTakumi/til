@@ -30,6 +30,7 @@ bun install_extensions.ts
 bunではなく、Node.jsを利用するときは、以下のようにする。
 
 ```ts
+// install_extensions.ts
 import { readFileSync } from 'fs';
 import { execSync } from 'child_process';
 
