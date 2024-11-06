@@ -6,8 +6,8 @@ export class Result<T, E extends Error> {
     return new Result<T, Error>(value);
   }
 
-  static failure<E extends Error>(error: E): Result<any, E> {
-    return new Result<any, E>(error);
+  static failure<E extends Error>(error: E): Result<unknown, E> {
+    return new Result<unknown, E>(error);
   }
 
   private readonly value: T | E;
