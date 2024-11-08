@@ -2,38 +2,13 @@
 
 継承して使う。
 
-Result型は[こちら](./result.md)を参照。
+バリデーション失敗時に例外を投げるようにしているので、不正な値の場合はインスタンスの生成に失敗する。
 
 ```typescript
-export abstract class BaseValueObject<T> {
-  protected _value!: T;
+const opaqueSymbol: unique symbol = Symbol('opaqueSymbol');
 
-  protected abstract validate(value: T): Result<T, Error>;
-
-  constructor(value: T) {
-    this.validate(value).match({
-      success: (value) => {
-        this._value = value;
-      },
-      failure: (error) => {
-        throw error;
-      },
-    });
-  }
-
-  get value(): T {
-    return this._value;
-  }
-
-  equals(name: BaseValueObject<T>): boolean {
-    return this._value === name.value;
-  }
-}
-```
-
-バリデーション失敗時に例外を投げるようにすれば、Result型を使わずに実装することもできる。
-```typescript
-export abstract class BaseValueObject<T> {
+export abstract class BaseValueObject<TSymbol extends string, T> {
+  readonly [opaqueSymbol]: TSymbol;
   protected _value!: T;
 
   protected abstract validate(value: T): T;
@@ -46,8 +21,8 @@ export abstract class BaseValueObject<T> {
     return this._value;
   }
 
-  equals(name: BaseValueObject<T>): boolean {
-    return this._value === name.value;
+  equals(other: BaseValueObject<TSymbol, T>): boolean {
+    return this === other || this._value === other._value;
   }
 }
 ```
