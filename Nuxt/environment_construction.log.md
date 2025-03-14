@@ -359,19 +359,86 @@
         }
         ```
     </details>
+- ESLint Stylisticを有効にする。
+  - <details>
+    <summary>nuxt.config.ts</summary>
+
+    ```tsx
+    export default defineNuxtConfig({
+      modules: [
+        '@nuxt/eslint'
+      ],
+      eslint: {
+        stylistic: true  // 追加
+      }
+    })
+    ```
+
+    </details>
 - Dev Server Checkerを有効にする。
-    - <details>
-      <summary>nuxt.config.ts</summary>
-        ```tsx
-        export default defineNuxtConfig({
-          modules: [
-            '@nuxt/eslint'
+  - <details>
+    <summary>nuxt.config.ts</summary>
+      ```tsx
+      export default defineNuxtConfig({
+        modules: [
+          '@nuxt/eslint'
+        ],
+        eslint: {
+          checker: process.env.NODE_ENV === 'local'  // 追加
+        }
+      })
+      ```
+    </details>
+- ルールを追加する
+  - <details>
+    <summary>eslint.config.mjs</summary>
+
+    ```typescript
+    import withNuxt from './.nuxt/eslint.config.mjs';
+
+    export default withNuxt(
+      {
+        files: ['**/*.{ts,vue,mjs}'],
+        rules: {
+          '@stylistic/semi': ['error', 'always'],
+          '@stylistic/member-delimiter-style': [
+            'error',
+            {
+              multiline: {
+                delimiter: 'semi',
+                requireLast: true,
+              },
+              singleline: {
+                delimiter: 'comma',
+                requireLast: false,
+              },
+            },
           ],
-          eslint: {
-            checker: process.env.NODE_ENV === 'local'  // 追加
-          }
-        })
-        ```
+          '@stylistic/operator-linebreak': ['error', 'before',
+            {
+              overrides: {
+                '=': 'after',
+                '??': 'none',
+              },
+            },
+          ],
+          '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: true }],
+          '@stylistic/quote-props': ['error', 'as-needed'],
+          '@stylistic/arrow-parens': ['error', 'always'],
+        },
+        ignores: ['.idea', '.vscode', '.nuxt', 'public', '.output'],
+      },
+      {
+        files: ['**/*.vue'],
+        rules: {
+          'vue/no-multiple-template-root': 'off',
+          'vue/multi-word-component-names': 'off',
+        },
+        ignores: ['.idea', '.vscode', '.nuxt', 'public', '.output'],
+      },
+    );
+
+    ```
     </details>
 
 ### linterプラグインを追加する
@@ -453,4 +520,206 @@
     ```
   </details>
 
+## srcディレクトリを有効にする
 
+- nuxt.config.tsに設定を追加する
+    - <details>
+      <summary>nuxt.config.ts</summary>
+        ```tsx
+        // https://nuxt.com/docs/api/configuration/nuxt-config
+        export default defineNuxtConfig({
+          compatibilityDate: '2024-04-03',
+          devtools: { enabled: true },
+          srcDir: 'src/',  // 追加
+        })
+        ```
+      </details>
+- src/以下で動作するディレクトリを移動する。
+    - [こちら](https://nuxt.com/docs/api/nuxt-config#srcdir)より抜粋
+    ```bash
+    -| app/
+    ---| node_modules/
+    ---| nuxt.config.js
+    ---| package.json
+    ---| src/
+    ------| assets/
+    ------| components/
+    ------| layouts/
+    ------| middleware/
+    ------| pages/
+    ------| plugins/
+    ------| public/
+    ------| store/
+    ------| server/
+    ------| app.config.ts
+    ------| app.vue
+    ------| error.vue
+    ```
+
+## Pagesを有効にする
+
+- pageファイルを作成する
+    - <details>
+      <summary>src/pages/index.vue</summary>
+      - 拡張機能にスニペットがあるので、空ファイルに`vue3` と入力し、TABキーを押すと、`script`, `tamplate`, `style`のタグが自動で入力される。
+        ```tsx
+        <script setup lang='ts'>
+        </script>
+        <template>
+          <NuxtRouteAnnouncer />
+          <NuxtWelcome />
+        </template>
+        
+        <style scoped>
+        </style>
+        ```
+
+      </details>        
+        
+- app.vueを修正する。
+    - <details>
+      <summary>src/app.vue</summary>
+
+        ```tsx
+        <template>
+          <div>
+            <NuxtPage /> <!-- 修正 -->
+          </div>
+        </template>
+        ```
+      
+      </details>
+
+## レイアウトを有効にする
+
+- app.vueを修正する。
+  - <details>
+    <summary>app.vue</summary>
+
+      ```tsx
+      <template>
+        <div>
+          <NuxtLayout>
+            <NuxtPage />
+          </NuxtLayout>
+        </div>
+      </template>
+      ```
+
+
+    </details>
+- レイアウトファイルを追加する。
+  - <details>
+    <summary>src/layout/default.vue</summary>
+
+      ```tsx
+      <script setup lang='ts'>
+      </script>
+      
+      <template>
+        <div>
+          <slot />
+        </div>
+      </template>
+      
+      <style scoped>
+      </style>
+      ```
+    
+    </details>
+
+        
+
+## サーバーサイドレンダリングを有効にする
+
+- nuxt.config.tsに設定を追加する。
+  - <details>
+    <summary>nuxt.config.ts</summary>
+
+      ```tsx
+      export default defineNuxtConfig({
+        ssr: true // 追加
+      })
+      ```
+
+    </details>
+
+## 型チェックを有効にする
+- [TypeScript · Nuxt Concepts](https://nuxt.com/docs/guide/concepts/typescript#type-checking)
+- 必要な依存をインストールする
+    ```bash
+    pnpm add -D vue-tsc typescript
+    ```
+- 設定を有効にする。
+    ```bash
+    npx nuxi typecheck
+    ```
+- 開発時に型チェックを実行するように設定する。
+  - <details>
+    <summary>nuxt.config.ts</summary>
+
+      ```tsx
+      export default defineNuxtConfig({
+        // 追加
+        typescript: {
+          typeCheck: true // ビルド時に型チェックを実行する場合は"build"にする
+        }
+      })
+      ```
+
+    </details>
+
+## tailwindcssを有効にする
+- [Install Tailwind CSS with Nuxt - Tailwind CSS](https://tailwindcss.com/docs/installation/framework-guides/nuxt)
+- tailwindcssをインストールする
+    ```bash
+    pnpm add tailwindcss @tailwindcss/vite
+    ```
+- nuxt.config.tsを修正する
+  - <details>
+    <summary>nuxt.config.ts</summary>
+
+    ```tsx
+    import tailwindcss from "@tailwindcss/vite"; // 追加
+
+    export default defineNuxtConfig({
+      compatibilityDate: "2024-11-01",
+      devtools: { enabled: true },
+      vite: {
+        plugins: [
+          tailwindcss(), // 追加
+        ],
+      },
+    });
+    ```
+    
+    </details>
+- tailwindcssをimportする
+  - <details>
+    <summary>src/assets/css/main.css</summary>
+    
+    ```css
+    @import "tailwindcss";
+    ```
+
+    </details>
+- グローバルにcssファイルを追加する
+  - <details>
+    <summary>nuxt.config.ts</summary>
+    
+    ```tsx
+    import tailwindcss from "@tailwindcss/vite";
+
+    export default defineNuxtConfig({
+      compatibilityDate: "2024-11-01",
+      devtools: { enabled: true },
+      css: ['~/assets/css/main.css'], // 追加
+      vite: {
+        plugins: [
+          tailwindcss(),
+        ],
+      },
+    });
+    ```
+
+    </details>
