@@ -56,6 +56,8 @@ export class TestingModule {
 
     await app.init();
 
+    moduleFixture.useLogger(new ConsoleLogger('test', { logLevels: [] }));
+
     const prisma = await moduleFixture.resolve(PrismaService);
 
     return { app, prisma };
