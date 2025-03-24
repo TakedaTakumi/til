@@ -723,3 +723,53 @@
     ```
 
     </details>
+
+## Playwrightを有効にする
+
+- [Installation | Playwright](https://playwright.dev/docs/intro)
+- インストールする
+    ```bash
+    pnpm create playwright
+    ```
+- VSCodeの拡張機能をインストールする
+    - [Playwright Test for VSCode - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright)
+- Dockerfileを修正
+  - <details>
+    <summary>Dockerfile</summary>
+
+    ```Dockerfile
+    FROM node:22 AS base
+
+    ENV PNPM_HOME="/pnpm"
+    ENV PATH="$PNPM_HOME:$PATH"
+    RUN corepack enable
+
+    WORKDIR /app
+
+    COPY package.json pnpm-lock.yaml ./
+
+    FROM base AS develop
+    RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+    RUN pnpm exec playwright install-deps  # 追加
+    RUN pnpm exec playwright install  # 追加
+
+    CMD [ "pnpm", "dev" ]
+
+    FROM base AS prod-deps
+    RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+    FROM base AS build
+    RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+    RUN pnpm run build
+
+    FROM gcr.io/distroless/nodejs22-debian12
+    WORKDIR /app
+    COPY --from=prod-deps /app/node_modules /app/node_modules
+    COPY --from=build /app/.output /app/.output
+    EXPOSE 8000
+
+    CMD ["./.output/server/index.mjs"]
+    ```
+
+    </details>
