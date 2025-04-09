@@ -27,3 +27,16 @@ return new Promise(resolve => {
 	})();
 });
 ```
+
+## typeをinterfaceに変換する
+
+```typescript
+type SomeList = Some[];
+
+   ↓
+
+interface SomeList {
+  [index: number]: Some;
+}
+```
+
