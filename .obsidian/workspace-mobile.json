@@ -67,14 +67,14 @@
             "id": "3f77747201f16220",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "diff-view",
               "state": {
-                "file": "メモ/IFDAM図サンプル.md",
-                "mode": "preview",
-                "source": true
+                "aFile": "CSS/背景色に応じて文字色を変更する.md",
+                "bFile": "CSS/背景色に応じて文字色を変更する.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "IFDAM図サンプル"
+              "icon": "git-pull-request",
+              "title": "Diff: 背景色に応じて文字色を変更する"
             }
           }
         ],
@@ -151,7 +151,7 @@
         }
       }
     ],
-    "currentTab": 4
+    "currentTab": 0
   },
   "right": {
     "id": "0e32a5f584ec0d3a",
@@ -224,6 +224,8 @@
   },
   "active": "3f77747201f16220",
   "lastOpenFiles": [
+    "cook_recipe/カップケーキ.md",
+    "nodejs/NestJS/tips.md",
     "/メモ/IFDAM図サンプル.md",
     "/メモ",
     "ツール/Hydrangea/Hydrangea メモ.md",
@@ -252,7 +254,6 @@
     "/ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
     "/ツール/Hydrangea/要件定義/実装方針/マインドマップ編集画面.md",
     "/ツール/Hydrangea/要件定義/todo.md",
-    "/ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
     "/ツール/Hydrangea/要件定義/検討",
     "/ツール/Hydrangea/要件定義/実装方針",
     "/ツール/Hydrangea/要件定義/DataModel",
