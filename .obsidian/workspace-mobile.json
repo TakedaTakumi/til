@@ -1,0 +1,263 @@
+{
+  "main": {
+    "id": "1e057ee8b56067d7",
+    "type": "split",
+    "children": [
+      {
+        "id": "63c1da2c22c06c3b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7b3effea4ab3d297",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ツール/Hydrangea/02_hydrangea-lib.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "02_hydrangea-lib"
+            }
+          },
+          {
+            "id": "6edca5e024a622be",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ツール/Indigo Doc/IndigoDoc メモ.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "IndigoDoc メモ"
+            }
+          },
+          {
+            "id": "1472bc67fb1f6374",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ツール/Green Bell/GreenBell メモ.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "GreenBell メモ"
+            }
+          },
+          {
+            "id": "39c71544c6b945b9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ツール/Ivy Diagram/IvyDiagram メモ.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "IvyDiagram メモ"
+            }
+          },
+          {
+            "id": "3f77747201f16220",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "メモ/IFDAM図サンプル.md",
+                "mode": "preview",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "IFDAM図サンプル"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6439b64d36ba42ba",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "0168820aa0c4f619",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false
+          },
+          "icon": "lucide-folder-closed",
+          "title": "ファイルエクスプローラ"
+        }
+      },
+      {
+        "id": "a07002281b4471d9",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "tag:#♥",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "検索"
+        }
+      },
+      {
+        "id": "9f53df7b0737d228",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true
+          },
+          "icon": "lucide-tags",
+          "title": "タグ"
+        }
+      },
+      {
+        "id": "6772f8c0b10cdeb6",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "ブックマーク"
+        }
+      },
+      {
+        "id": "16e5d2e9d3c06b99",
+        "type": "leaf",
+        "state": {
+          "type": "recent-files",
+          "state": {},
+          "icon": "clock",
+          "title": "Recent Files"
+        }
+      }
+    ],
+    "currentTab": 4
+  },
+  "right": {
+    "id": "0e32a5f584ec0d3a",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "043f781c315d4d52",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "ラーニングログ/ドメイン駆動設計をはじめよう.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "バックリンク"
+        }
+      },
+      {
+        "id": "9e8d40b42b771fb2",
+        "type": "leaf",
+        "state": {
+          "type": "git-view",
+          "state": {},
+          "icon": "git-pull-request",
+          "title": "Source Control"
+        }
+      },
+      {
+        "id": "4e3dac85b89f049a",
+        "type": "leaf",
+        "state": {
+          "type": "git-history-view",
+          "state": {},
+          "icon": "history",
+          "title": "History"
+        }
+      },
+      {
+        "id": "0f2c93c05e7d2c4f",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "ラーニングログ/ドメイン駆動設計をはじめよう.md"
+          },
+          "icon": "lucide-list",
+          "title": "アウトライン"
+        }
+      }
+    ],
+    "currentTab": 1
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "obsidian-git:Open Git source control": false,
+      "markdown-importer:Markdownインポーターを開く": false,
+      "switcher:クイックスイッチャーを開く": false,
+      "graph:グラフビューを開く": false,
+      "canvas:新規キャンバスを作成": false,
+      "daily-notes:今日のデイリーノートを開く": false,
+      "command-palette:コマンドパレットを開く": false
+    }
+  },
+  "active": "3f77747201f16220",
+  "lastOpenFiles": [
+    "/メモ/IFDAM図サンプル.md",
+    "/メモ",
+    "ツール/Hydrangea/Hydrangea メモ.md",
+    "メモ/IFDAM図サンプル.md",
+    "勉強/DDD.md",
+    "メモ/Git Patch.md",
+    "その他/Gitワークフロー.md",
+    "ツール/Hydrangea/ドキュメントサンプル（スタイルあり）.md",
+    "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
+    "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md",
+    "ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
+    "ツール/Hydrangea/要件定義/画面設計.md",
+    "ツール/Hydrangea/01_core/概要.md",
+    "ツール/Hydrangea/01_core/シーケンス図.md",
+    "ツール/Hydrangea/01_core/オブジェクト定義.md",
+    "ツール/Hydrangea/要件定義/実装方針/マインドマップ編集画面.md",
+    "ツール/Hydrangea/要件定義/要件定義.md",
+    "ツール/Hydrangea/要件定義/要求.md",
+    "ツール/Hydrangea/要件定義/ユースケース.md",
+    "ツール/Hydrangea/要件定義/todo.md",
+    "ツール/Hydrangea/要件定義/検討",
+    "ツール/Hydrangea/要件定義/実装方針",
+    "ツール/Hydrangea/要件定義/DataModel/Scenario.toml.md",
+    "ツール/Hydrangea/要件定義/DataModel/PageDesign.toml.md",
+    "ツール/Hydrangea/要件定義/DataModel",
+    "/ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
+    "/ツール/Hydrangea/要件定義/実装方針/マインドマップ編集画面.md",
+    "/ツール/Hydrangea/要件定義/todo.md",
+    "/ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
+    "/ツール/Hydrangea/要件定義/検討",
+    "/ツール/Hydrangea/要件定義/実装方針",
+    "/ツール/Hydrangea/要件定義/DataModel",
+    "/ツール/Hydrangea/要件定義",
+    "/ツール/Hydrangea",
+    "/ツール"
+  ]
+}

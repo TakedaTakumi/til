@@ -1,0 +1,14 @@
+{
+  "baseFontSize": 17,
+  "cssTheme": "Obsidian Nord",
+  "accentColor": "",
+  "enabledCssSnippets": [
+    "header_decorate",
+    "italic_em_color",
+    "remove-strike-from-checked"
+  ],
+  "textFontFamily": "メイリオ,Meiryo UI",
+  "monospaceFontFamily": "HackGenNerd,HackGen35Nerd",
+  "interfaceFontFamily": "",
+  "theme": "system"
+}

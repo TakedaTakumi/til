@@ -1,0 +1,24 @@
+{
+  "recentFiles": [
+    {
+      "basename": "IFDAM図サンプル",
+      "path": "メモ/IFDAM図サンプル.md"
+    },
+    {
+      "basename": "ブログ下書き",
+      "path": "メモ/ブログ下書き.md"
+    },
+    {
+      "basename": "Scenario.yaml",
+      "path": "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md"
+    },
+    {
+      "basename": "PageDesign.yaml",
+      "path": "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md"
+    }
+  ],
+  "omittedPaths": [],
+  "omittedTags": [],
+  "updateOn": "file-open",
+  "omitBookmarks": false
+}

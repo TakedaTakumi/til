@@ -1,0 +1,4 @@
+:is(.markdown-preview-view,.markdown-rendered)  ul>li.task-list-item.is-checked, 
+.markdown-source-view.mod-cm6 .HyperMD-task-line[data-task] {
+  text-decoration: none;
+}

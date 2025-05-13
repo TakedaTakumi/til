@@ -1,0 +1,65 @@
+.markdown-preview-view h1 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h1) {
+	margin-bottom: 5px;
+	border-left: 3px solid var(--text-title-h1);
+	border-bottom: 1px solid var(--text-title-h1);
+}
+
+.markdown-preview-view h2 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h2) {
+	margin-bottom: 5px;
+	border-left: 6px solid var(--text-title-h2);
+	border-bottom: 1px solid var(--text-title-h2);
+}
+
+.markdown-preview-view h3 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h3) {
+	margin-bottom: 5px;
+	border-left: 9px solid var(--text-title-h3);
+	border-bottom: 1px solid var(--text-title-h3);
+}
+
+.markdown-preview-view h4 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h4) {
+	margin-bottom: 5px;
+	border-left: 12px solid var(--text-title-h4);
+	border-bottom: 1px solid var(--text-title-h4);
+}
+
+.markdown-preview-view h5 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h5) {
+	margin-bottom: 5px;
+	border-left: 15px solid var(--text-title-h5);
+	border-bottom: 1px solid var(--text-title-h5);
+}
+
+.markdown-preview-view h6 {
+	margin: 0em;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.markdown-preview-view div:has(>h6) {
+	margin-bottom: 5px;
+	border-left: 18px solid var(--text-title-h6);
+	border-bottom: 1px solid var(--text-title-h6);
+}
