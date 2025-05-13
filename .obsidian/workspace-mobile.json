@@ -11,10 +11,14 @@
             "id": "70c588adb512ba58",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "nodejs/typescript/sample_code/base_value_object.md",
+                "mode": "preview",
+                "source": true
+              },
               "icon": "lucide-file",
-              "title": "新規タブ"
+              "title": "base_value_object"
             }
           }
         ]
@@ -107,19 +111,6 @@
         }
       },
       {
-        "id": "b7d0b865156c41ee",
-        "type": "leaf",
-        "state": {
-          "type": "outgoing-link",
-          "state": {
-            "linksCollapsed": false,
-            "unlinkedCollapsed": true
-          },
-          "icon": "links-going-out",
-          "title": "アウトゴーイングリンク"
-        }
-      },
-      {
         "id": "fe782e135f78d02a",
         "type": "leaf",
         "state": {
@@ -154,7 +145,8 @@
       "daily-notes:今日のデイリーノートを開く": false,
       "templates:テンプレートを挿入": false,
       "command-palette:コマンドパレットを開く": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "markdown-importer:Markdownインポーターを開く": false
     }
   },
   "active": "70c588adb512ba58",
