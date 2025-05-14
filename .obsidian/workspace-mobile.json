@@ -69,12 +69,12 @@
             "state": {
               "type": "diff-view",
               "state": {
-                "aFile": "CSS/背景色に応じて文字色を変更する.md",
-                "bFile": "CSS/背景色に応じて文字色を変更する.md",
+                "aFile": ".obsidian/app.json",
+                "bFile": ".obsidian/app.json",
                 "aRef": ""
               },
               "icon": "git-pull-request",
-              "title": "Diff: 背景色に応じて文字色を変更する"
+              "title": "Diff: app.json"
             }
           }
         ],
@@ -224,6 +224,8 @@
   },
   "active": "3f77747201f16220",
   "lastOpenFiles": [
+    "cook_recipe/親子丼.md",
+    "要件定義/四方山.md",
     "cook_recipe/カップケーキ.md",
     "nodejs/NestJS/tips.md",
     "/メモ/IFDAM図サンプル.md",
@@ -252,8 +254,6 @@
     "ツール/Hydrangea/要件定義/DataModel/PageDesign.toml.md",
     "ツール/Hydrangea/要件定義/DataModel",
     "/ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
-    "/ツール/Hydrangea/要件定義/実装方針/マインドマップ編集画面.md",
-    "/ツール/Hydrangea/要件定義/todo.md",
     "/ツール/Hydrangea/要件定義/検討",
     "/ツール/Hydrangea/要件定義/実装方針",
     "/ツール/Hydrangea/要件定義/DataModel",

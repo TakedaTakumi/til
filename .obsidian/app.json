@@ -40,5 +40,6 @@
   "showUnsupportedFiles": true,
   "smartIndentList": true,
   "useTab": false,
-  "tabSize": 2
+  "tabSize": 2,
+  "defaultViewMode": "preview"
 }
