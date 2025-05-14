@@ -67,14 +67,14 @@
             "id": "3f77747201f16220",
             "type": "leaf",
             "state": {
-              "type": "diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": ".obsidian/app.json",
-                "bFile": ".obsidian/app.json",
-                "aRef": ""
+                "file": "要件定義/四方山.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "git-pull-request",
-              "title": "Diff: app.json"
+              "icon": "lucide-file",
+              "title": "四方山"
             }
           }
         ],
