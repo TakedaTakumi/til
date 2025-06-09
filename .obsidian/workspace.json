@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "メモ/ブログ下書き.md",
-                "mode": "source",
+                "file": "要件定義/進め方.md",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "ブログ下書き"
+              "title": "進め方"
             }
           }
         ]
@@ -172,6 +172,8 @@
   },
   "active": "9aaf227612a8493b",
   "lastOpenFiles": [
+    "要件定義/四方山.md",
+    "要件定義/進め方.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml.md",
@@ -203,9 +205,7 @@
     "ツール/Hydrangea/01_core/シーケンス図.md",
     "ツール/Hydrangea/01_core/オブジェクト定義.md",
     "ラーニングログ/［入門］ドメイン駆動設計.md",
-    "物語/カテイの事情/メモ.md",
     "物語/カテイの事情",
-    "物語/魔弾の射手/概要.md",
     "ツール/Logger"
   ]
 }
