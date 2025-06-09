@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "要件定義/進め方.md",
-                "mode": "preview",
+                "file": "reference_url/web_app.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "進め方"
+              "title": "web_app"
             }
           }
         ]
@@ -173,8 +173,15 @@
   },
   "active": "9aaf227612a8493b",
   "lastOpenFiles": [
-    "要件定義/四方山.md",
+    "reference_url/要件定義_設計.md",
+    "reference_url/web_app.md",
+    "reference_url/無題のフォルダ",
+    "reference_url/html_css.md",
+    "docker/compose/command.md",
+    "devcontainer/install_extensions.md",
+    "git/command.md",
     "要件定義/進め方.md",
+    "要件定義/四方山.md",
     "README.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md",
@@ -194,18 +201,12 @@
     "ツール/Hydrangea/要件定義/要求.md",
     "ツール/Hydrangea/02_hydrangea-lib.md",
     "ツール/Hydrangea/要件定義/実装方針",
-    "ツール/Hydrangea/要件定義/検討/キャンパス実装.md",
     "ツール/Hydrangea/要件定義/検討",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml",
     "ツール/Hydrangea/要件定義/DataModel",
-    "ツール/Hydrangea/要件定義/PageDesign.toml.md",
-    "ツール/Hydrangea/要件定義/PageDesign.yaml.md",
     "ツール/Hydrangea/要件定義/PageDesign.yaml",
     "ツール/Hydrangea/要件定義/PageDesign.toml",
-    "ツール/Hydrangea/01_core/概要.md",
-    "ツール/Hydrangea/01_core/シーケンス図.md",
-    "ツール/Hydrangea/01_core/オブジェクト定義.md",
     "物語/カテイの事情",
     "ツール/Logger"
   ]

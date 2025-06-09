@@ -1,6 +1,30 @@
 {
   "recentFiles": [
     {
+      "basename": "web_app",
+      "path": "reference_url/web_app.md"
+    },
+    {
+      "basename": "要件定義_設計",
+      "path": "reference_url/要件定義_設計.md"
+    },
+    {
+      "basename": "html_css",
+      "path": "reference_url/html_css.md"
+    },
+    {
+      "basename": "command",
+      "path": "docker/compose/command.md"
+    },
+    {
+      "basename": "install_extensions",
+      "path": "devcontainer/install_extensions.md"
+    },
+    {
+      "basename": "command",
+      "path": "git/command.md"
+    },
+    {
       "basename": "進め方",
       "path": "要件定義/進め方.md"
     },
