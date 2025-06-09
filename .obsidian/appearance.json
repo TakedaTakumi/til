@@ -10,5 +10,6 @@
   "textFontFamily": "メイリオ,Meiryo UI",
   "monospaceFontFamily": "HackGenNerd,HackGen35Nerd",
   "interfaceFontFamily": "",
-  "theme": "system"
+  "theme": "system",
+  "nativeMenus": false
 }

@@ -9,6 +9,10 @@
       "path": "要件定義/四方山.md"
     },
     {
+      "basename": "README",
+      "path": "README.md"
+    },
+    {
       "basename": "親子丼",
       "path": "cook_recipe/親子丼.md"
     },

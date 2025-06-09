@@ -167,13 +167,15 @@
       "daily-notes:今日のデイリーノートを開く": false,
       "command-palette:コマンドパレットを開く": false,
       "markdown-importer:Markdownインポーターを開く": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "random-note:ランダムノートを開く": false
     }
   },
   "active": "9aaf227612a8493b",
   "lastOpenFiles": [
     "要件定義/四方山.md",
     "要件定義/進め方.md",
+    "README.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml.md",
@@ -204,7 +206,6 @@
     "ツール/Hydrangea/01_core/概要.md",
     "ツール/Hydrangea/01_core/シーケンス図.md",
     "ツール/Hydrangea/01_core/オブジェクト定義.md",
-    "ラーニングログ/［入門］ドメイン駆動設計.md",
     "物語/カテイの事情",
     "ツール/Logger"
   ]
