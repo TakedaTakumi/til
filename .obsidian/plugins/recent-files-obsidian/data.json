@@ -1,6 +1,18 @@
 {
   "recentFiles": [
     {
+      "basename": "docker",
+      "path": "dotfile/docker.md"
+    },
+    {
+      "basename": "command",
+      "path": "docker/compose/command.md"
+    },
+    {
+      "basename": "import_no-restricted-path",
+      "path": "nodejs/eslint/import_no-restricted-path.md"
+    },
+    {
       "basename": "web_app",
       "path": "reference_url/web_app.md"
     },
@@ -11,10 +23,6 @@
     {
       "basename": "html_css",
       "path": "reference_url/html_css.md"
-    },
-    {
-      "basename": "command",
-      "path": "docker/compose/command.md"
     },
     {
       "basename": "install_extensions",
