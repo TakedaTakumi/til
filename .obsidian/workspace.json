@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "reference_url/web_app.md",
+                "file": "reference_url/web_dev.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "web_app"
+              "title": "web_dev"
             }
           }
         ]
@@ -173,11 +173,12 @@
   },
   "active": "9aaf227612a8493b",
   "lastOpenFiles": [
+    "reference_url/web_app.md",
+    "reference_url/web_dev.md",
     "README.md",
     "dotfile/docker.md",
     "docker/compose/command.md",
     "nodejs/eslint/import_no-restricted-path.md",
-    "reference_url/web_app.md",
     "reference_url/要件定義_設計.md",
     "reference_url/無題のフォルダ",
     "reference_url/html_css.md",
@@ -199,7 +200,6 @@
     "ツール/Hydrangea/要件定義/todo.md",
     "ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
     "ツール/Hydrangea/要件定義/画面設計.md",
-    "ツール/Hydrangea/要件定義/要件定義.md",
     "ツール/Hydrangea/要件定義/実装方針",
     "ツール/Hydrangea/要件定義/検討",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml",
