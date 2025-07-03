@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "dotfile/docker.md",
-                "mode": "preview",
+                "file": "reference_url/web_app.md",
+                "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "docker"
+              "title": "web_app"
             }
           }
         ]
@@ -171,8 +171,10 @@
       "random-note:ランダムノートを開く": false
     }
   },
-  "active": "c4a71211b7bdeb1f",
+  "active": "9aaf227612a8493b",
   "lastOpenFiles": [
+    "README.md",
+    "dotfile/docker.md",
     "docker/compose/command.md",
     "nodejs/eslint/import_no-restricted-path.md",
     "reference_url/web_app.md",
@@ -183,7 +185,6 @@
     "git/command.md",
     "要件定義/進め方.md",
     "要件定義/四方山.md",
-    "README.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/PageDesign.yaml.md",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml.md",
@@ -199,7 +200,6 @@
     "ツール/Hydrangea/要件定義/検討/キャンバス実装.md",
     "ツール/Hydrangea/要件定義/画面設計.md",
     "ツール/Hydrangea/要件定義/要件定義.md",
-    "ツール/Hydrangea/要件定義/要求.md",
     "ツール/Hydrangea/要件定義/実装方針",
     "ツール/Hydrangea/要件定義/検討",
     "ツール/Hydrangea/要件定義/DataModel/Scenario.toml",

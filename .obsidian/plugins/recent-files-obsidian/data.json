@@ -1,6 +1,14 @@
 {
   "recentFiles": [
     {
+      "basename": "web_app",
+      "path": "reference_url/web_app.md"
+    },
+    {
+      "basename": "README",
+      "path": "README.md"
+    },
+    {
       "basename": "docker",
       "path": "dotfile/docker.md"
     },
@@ -11,10 +19,6 @@
     {
       "basename": "import_no-restricted-path",
       "path": "nodejs/eslint/import_no-restricted-path.md"
-    },
-    {
-      "basename": "web_app",
-      "path": "reference_url/web_app.md"
     },
     {
       "basename": "要件定義_設計",
@@ -39,10 +43,6 @@
     {
       "basename": "四方山",
       "path": "要件定義/四方山.md"
-    },
-    {
-      "basename": "README",
-      "path": "README.md"
     },
     {
       "basename": "親子丼",
