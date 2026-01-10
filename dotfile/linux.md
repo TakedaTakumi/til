@@ -2,5 +2,5 @@
 
 ```sh
 alias sudo='sudo '
-alias own='chown -R tak_emi:tak_emi .'
+alias own='chown -R takeda:takeda .'
 ```
