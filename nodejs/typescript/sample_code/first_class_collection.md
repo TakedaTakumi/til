@@ -1,6 +1,7 @@
 # TypeScriptサンプルコード - ファーストクラスコレクションの基本型
 
 継承して使う。
+コレクションはEntityとして扱う
 
 ```typescript
 export class FirstClassCollection<T> {
