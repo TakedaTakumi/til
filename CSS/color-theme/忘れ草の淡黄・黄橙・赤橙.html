@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="ja" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>忘れ草のカラーテーマ ― 淡黄・黄橙・赤橙</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ ページ共通(クローム) ============ */
+  html[data-mode="dark"]{
+    --page-bg:#191510; --page-ink:#efe6d2; --page-dim:#a99877;
+    --hair:rgba(239,230,210,.14); --panel:#221d15;
+  }
+  html[data-mode="light"]{
+    --page-bg:#ece4d0; --page-ink:#2c2410; --page-dim:#6f6244;
+    --hair:rgba(44,36,16,.16); --panel:#f3ecda;
+  }
+  :root{
+    --serif:"Shippori Mincho B1",serif;
+    --sans:"Zen Kaku Gothic New",sans-serif;
+  }
+
+  /* ============ ① 淡黄(ユウスゲ) ============ */
+  .theme.t1{
+    --color-ground:#1c1a10; --color-surface:#2a2716;
+    --color-primary:#d9b54a; --color-primary-btn:#caa53c; --color-on-primary:#1a1608;
+    --color-secondary:#e8d27a; --color-secondary-ink:#e8d27a;
+    --color-accent:#c98a3a;   --color-accent-ink:#e0a85c;
+    --color-muted:#9a8b52; --color-text:#f1ead2; --color-text-dim:#bdb48c;
+  }
+  html[data-mode="light"] .theme.t1{
+    --color-ground:#f7f2df; --color-surface:#fcf9ee;
+    --color-primary:#9a7d1e; --color-primary-btn:#8a6f18; --color-on-primary:#fff8e6;
+    --color-secondary:#caa53c; --color-secondary-ink:#7a6310;
+    --color-accent:#b06d1a;   --color-accent-ink:#8a5310;
+    --color-muted:#9a8b52; --color-text:#3a3012; --color-text-dim:#6a5f38;
+  }
+
+  /* ============ ② 黄橙(ニッコウキスゲ・萱草色軸) ============ */
+  .theme.t2{
+    --color-ground:#241606; --color-surface:#352208;
+    --color-primary:#f0a818; --color-primary-btn:#e09810; --color-on-primary:#241200;
+    --color-secondary:#f8c860; --color-secondary-ink:#f8c860;
+    --color-accent:#d96b1f;   --color-accent-ink:#ef9050;
+    --color-muted:#b08038; --color-text:#f6e8cf; --color-text-dim:#c8ab85;
+  }
+  html[data-mode="light"] .theme.t2{
+    --color-ground:#fdf3df; --color-surface:#fffaef;
+    --color-primary:#b56a08; --color-primary-btn:#a85e06; --color-on-primary:#fff6e4;
+    --color-secondary:#e09810; --color-secondary-ink:#8a5a08;
+    --color-accent:#c2521a;   --color-accent-ink:#a83f12;
+    --color-muted:#b08038; --color-text:#3d2608; --color-text-dim:#6e5224;
+  }
+
+  /* ============ ③ 赤橙(ノカンゾウ・ヤブカンゾウ) ============ */
+  .theme.t3{
+    --color-ground:#2a1006; --color-surface:#3d1a09;
+    --color-primary:#e2622a; --color-primary-btn:#c84e1c; --color-on-primary:#fff;
+    --color-secondary:#f0935a; --color-secondary-ink:#f0935a;
+    --color-accent:#c62f24;   --color-accent-ink:#e8746a;
+    --color-muted:#b06a40; --color-text:#f6e0d0; --color-text-dim:#cca088;
+  }
+  html[data-mode="light"] .theme.t3{
+    --color-ground:#fbeee4; --color-surface:#fef7f1;
+    --color-primary:#c2441a; --color-primary-btn:#b53c14; --color-on-primary:#fff;
+    --color-secondary:#e2622a; --color-secondary-ink:#a83815;
+    --color-accent:#b02018;   --color-accent-ink:#9a1c14;
+    --color-muted:#b06a40; --color-text:#3d1c0e; --color-text-dim:#6e4530;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;min-height:100%;background:var(--page-bg);transition:background .5s ease}
+  /* ビューポート全体を覆う固定背景レイヤー(描画環境に依存せず確実に切替) */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--page-bg);transition:background .5s ease}
+  body{
+    background:var(--page-bg); color:var(--page-ink);
+    min-height:100vh; font-family:var(--sans); line-height:1.8;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    transition:background .5s ease,color .5s ease;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── トグル ── */
+  .topbar{position:sticky;top:0;z-index:50;background:var(--panel);background:color-mix(in srgb,var(--page-bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.14em}
+  .brand small{color:var(--page-dim);font-family:var(--sans);font-size:.66rem;letter-spacing:.3em;margin-left:10px}
+  .toggle{display:inline-flex;border:1px solid var(--hair);border-radius:999px;overflow:hidden;font-size:.78rem}
+  .toggle button{background:transparent;border:none;color:var(--page-dim);font-family:var(--sans);padding:8px 18px;cursor:pointer;letter-spacing:.1em;transition:background .2s,color .2s}
+  .toggle button[aria-pressed="true"]{background:var(--page-ink);color:var(--page-bg);font-weight:700}
+
+  /* ── ヘッダー ── */
+  header{padding:74px 0 48px}
+  .eyebrow{font-size:.74rem;letter-spacing:.42em;color:var(--page-dim);text-transform:uppercase;display:flex;align-items:center;gap:16px;margin-bottom:28px}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--hair)}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.4rem,6.5vw,4.6rem);line-height:1.14;letter-spacing:.03em}
+  .lead{margin-top:26px;max-width:40em;font-size:1.02rem;color:var(--page-dim)}
+  .lead b{color:var(--page-ink);font-weight:500}
+
+  /* ── テーマ縦並び ── */
+  .theme{padding:58px 0;border-top:1px solid var(--hair)}
+  .theme-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .theme-name{font-family:var(--serif);font-weight:700;font-size:2.3rem;letter-spacing:.05em}
+  .theme-yomi{font-size:.78rem;letter-spacing:.32em;color:var(--page-dim)}
+  .theme-tag{margin-top:6px;font-size:.92rem;color:var(--page-dim);display:flex;align-items:center;gap:10px}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;margin-top:30px;align-items:start}
+
+  /* ════════ 署名ビジュアル：一日花の移ろい(メイン) ════════ */
+  /* 朝開いて夕方しぼむ一日花を、つぼみ→開花→しぼみの流れで見せる */
+  .dayflower{display:flex;align-items:flex-end;gap:18px;padding:14px 0 4px}
+  .stage{display:flex;flex-direction:column;align-items:center;gap:10px;flex:none}
+  .bloom{
+    width:74px;height:74px;position:relative;
+    opacity:0;animation:dawn .8s cubic-bezier(.2,.8,.2,1) forwards;
+    transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  /* 六弁の花びら(サブ要素)。放射状に配置 */
+  .petal{
+    position:absolute;left:50%;top:50%;
+    width:15px;height:34px;border-radius:50% 50% 48% 48%/64% 64% 36% 36%;
+    transform-origin:50% 100%;
+    box-shadow:0 2px 7px rgba(0,0,0,.20);
+  }
+  .core{position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+  /* 各段階のつぼみ/開花/しぼみは個別クラスで制御 */
+  .stage-label{font-size:.68rem;letter-spacing:.18em;color:var(--page-dim)}
+  .bloom:hover{transform:scale(1.08) rotate(4deg)}
+  @keyframes dawn{to{opacity:1}}
+
+  /* つぼみ：花びらを内側に閉じる */
+  .s-bud .petal{height:26px;width:11px}
+  /* しぼみ：花びらを下に垂らし縮める */
+  .s-wilt{opacity:.62}
+  .s-wilt .petal{height:24px;width:10px;border-radius:50% 50% 60% 60%/72% 72% 28% 28%}
+
+  .caption{font-size:.84rem;color:var(--page-dim);margin-top:16px}
+
+  /* ── 色一覧 ── */
+  .swatches{margin-top:4px}
+  .sw{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--hair)}
+  .sw-chip{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)}
+  .sw-name{font-family:var(--serif);font-size:1.02rem}
+  .sw-name span{font-family:var(--sans);font-size:.7rem;letter-spacing:.18em;color:var(--page-dim);margin-left:9px}
+  .sw-meta{text-align:right;font-size:.72rem;letter-spacing:.1em;color:var(--page-dim)}
+  .sw-meta .role{display:block;color:var(--page-ink);font-size:.76rem;letter-spacing:.14em}
+
+  .mini-h{margin-top:30px;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--page-dim);display:flex;align-items:center;gap:14px}
+  .mini-h:first-child{margin-top:0}
+  .mini-h::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+  /* ── 適用プレビュー ── */
+  .mock{margin-top:18px;border-radius:16px;padding:24px;border:1px solid var(--hair);background:var(--color-ground);color:var(--color-text);transition:background .5s,color .5s}
+  .mock .m-eyebrow{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--color-secondary-ink)}
+  .mock .m-title{font-family:var(--serif);font-size:1.4rem;margin:8px 0 6px;font-weight:600}
+  .mock .m-body{font-size:.88rem;color:var(--color-text-dim);margin-bottom:18px}
+  .mock .m-row{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+  .m-btn{border:none;border-radius:9px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .15s,filter .15s;background:var(--color-primary-btn);color:var(--color-on-primary)}
+  .m-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .m-btn.ghost{background:transparent;border:1.5px solid var(--color-secondary-ink);color:var(--color-secondary-ink);font-weight:500}
+  .m-pill{font-size:.72rem;padding:5px 12px;border-radius:999px;font-weight:700;letter-spacing:.06em;background:var(--color-accent);color:#fff}
+
+  /* ── コントラスト表 ── */
+  .ctab{margin-top:18px;border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  .ctab .row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;padding:10px 16px;font-size:.84rem;border-bottom:1px solid var(--hair)}
+  .ctab .row:last-child{border-bottom:none}
+  .ctab .row.head{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--page-dim);background:var(--panel)}
+  .c-ratio{font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem}
+  .badge{font-size:.64rem;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:6px;min-width:42px;text-align:center}
+  .badge.AAA{background:#1f7a4d;color:#fff}
+  .badge.AA{background:#3a7ab5;color:#fff}
+  .badge.NG{background:#b23b3b;color:#fff}
+  .ctab .note-line{padding:9px 16px;font-size:.72rem;color:var(--page-dim);background:var(--panel)}
+
+  /* ── 典拠メモ ── */
+  .note{margin-top:26px;padding:20px 22px;border-radius:12px;background:var(--panel);border:1px solid var(--hair);font-size:.86rem;color:var(--page-dim);line-height:1.85;grid-column:1 / -1}
+  .note h4{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--page-ink);margin-bottom:10px;font-weight:700}
+  .note b{color:var(--page-ink);font-weight:500}
+  .note.caveat{border-left:3px solid #c79a3a}
+
+  /* ── トークン ── */
+  .tokens{padding:58px 0 20px;border-top:1px solid var(--hair)}
+  .tokens-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+  .tokens h2{font-family:var(--serif);font-size:1.8rem;font-weight:700;letter-spacing:.04em}
+  .tokens p{color:var(--page-dim);font-size:.9rem;max-width:48em;margin-bottom:22px}
+  .tokens code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--panel);padding:1px 6px;border-radius:5px}
+  .copy-btn{background:var(--page-ink);color:var(--page-bg);border:none;border-radius:8px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.06em;cursor:pointer;transition:filter .2s}
+  .copy-btn:hover{filter:brightness(1.1)}
+  pre{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:22px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;line-height:1.7;color:var(--page-ink)}
+
+  footer{border-top:1px solid var(--hair);margin-top:36px;padding:42px 0 70px;font-size:.8rem;color:var(--page-dim);line-height:1.9}
+  footer b{color:var(--page-ink);font-weight:500}
+  footer .src{margin-top:12px;font-size:.74rem;opacity:.85}
+
+  @media(max-width:780px){
+    .grid{grid-template-columns:1fr;gap:30px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .bloom{animation:none;opacity:1}
+    .s-wilt{opacity:.62}
+    body,.mock{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">忘れ草<small>WASUREGUSA</small></div>
+    <div class="toggle" role="group" aria-label="表示モード切替">
+      <button id="btn-dark" aria-pressed="true" onclick="setMode('dark')">宵 Dark</button>
+      <button id="btn-light" aria-pressed="false" onclick="setMode('light')">朝 Light</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ワスレグサ属 ・ 一日花</div>
+    <h1>忘れ草の<br>three themes</h1>
+    <p class="lead">
+      朝にひらき、夕べにしぼむ<b>一日花(ひとひばな)</b>。属名 Hemerocallis は「一日の美」の意。
+      別名を<b>忘れ草</b>といい、身につければ憂いを忘れるという伝えが万葉のころから詠まれてきました。
+      同じ属のなかで花色は<b>淡黄から赤橙へ</b>と移ろいます。その色幅から<b>三つの</b>カラーテーマを仕立て、
+      <b>宵(ダーク)と朝(ライト)</b>を切り替えられ、主要な配色には<b>WCAGコントラスト比</b>を表示しています。
+    </p>
+  </header>
+</div>
+
+<div class="wrap">
+
+  <!-- ───────── ① 淡黄 ───────── -->
+  <section class="theme t1" id="theme-t1">
+    <div class="theme-head"><span class="theme-name">淡黄</span><span class="theme-yomi">USUKI ・ ユウスゲに寄せて</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#d9b54a"></span>支子・淡き黄 ― 夕に咲くユウスゲのレモン色</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">一日花の移ろい</div>
+        <div class="dayflower" aria-label="淡黄・一日花のつぼみ/開花/しぼみ">
+          <div class="stage">
+            <div class="bloom s-bud" style="animation-delay:.05s">
+              <span class="petal" style="background:#caa53c;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#d9b54a;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#c4992f;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#caa53c;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#d9b54a;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#c4992f;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#e8d27a"></span>
+            </div>
+            <span class="stage-label">朝・蕾</span>
+          </div>
+          <div class="stage">
+            <div class="bloom" style="animation-delay:.14s">
+              <span class="petal" style="background:#e8d27a;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#d9b54a;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#e0c560;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#e8d27a;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#d9b54a;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#e0c560;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#c98a3a"></span>
+            </div>
+            <span class="stage-label">昼・盛り</span>
+          </div>
+          <div class="stage">
+            <div class="bloom s-wilt" style="animation-delay:.23s">
+              <span class="petal" style="background:#9a8b52;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#8a7d48;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#9a8b52;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#857a44;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#9a8b52;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#8a7d48;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#c4992f"></span>
+            </div>
+            <span class="stage-label">夕・しぼみ</span>
+          </div>
+        </div>
+        <p class="caption">夕に咲き、翌朝にはしぼむユウスゲ。六弁の花が淡い黄をひとひだけ灯す。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#d9b54a"></span><span class="sw-name">淡萱草<span>うすかんぞう</span></span><span class="sw-meta">#D9B54A<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#e8d27a"></span><span class="sw-name">支子<span>くちなし</span></span><span class="sw-meta">#E8D27A<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#c98a3a"></span><span class="sw-name">黄朽葉<span>きくちば</span></span><span class="sw-meta">#C98A3A<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#9a8b52"></span><span class="sw-name">青朽葉<span>あおくちば</span></span><span class="sw-meta">#9A8B52<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">夕暮れの記</div>
+          <div class="m-title">ひと夜かぎりの花</div>
+          <p class="m-body">夕方にひらいて朝にはしぼむ花の、その一夜を書きとめるノート。</p>
+          <div class="m-row"><button class="m-btn">書きはじめる</button><button class="m-btn ghost">下書き</button><span class="m-pill">夕咲き</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t1">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×淡萱草)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>「淡黄」は色目集にある固有の色名ではなく、<b>淡く咲くユウスゲ(夕菅)の花色を、支子(くちなし)など黄系の伝統色に寄せた現代の配色</b>です。ユウスゲは夕方にひらいて翌朝しぼむ夜咲きの一日花。各HEXは目安で、史料や実際の花の色と厳密には一致しません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ② 黄橙 ───────── -->
+  <section class="theme t2" id="theme-t2">
+    <div class="theme-head"><span class="theme-name">黄橙</span><span class="theme-yomi">KI-DAIDAI ・ 萱草色を軸に</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#f0a818"></span>萱草色・山吹 ― 高原を染めるニッコウキスゲの黄</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">一日花の移ろい</div>
+        <div class="dayflower" aria-label="黄橙・一日花のつぼみ/開花/しぼみ">
+          <div class="stage">
+            <div class="bloom s-bud" style="animation-delay:.05s">
+              <span class="petal" style="background:#e09810;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#f0a818;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#d68e10;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#e09810;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#f0a818;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#d68e10;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#f8c860"></span>
+            </div>
+            <span class="stage-label">朝・蕾</span>
+          </div>
+          <div class="stage">
+            <div class="bloom" style="animation-delay:.14s">
+              <span class="petal" style="background:#f8c860;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#f0a818;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#f4b840;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#f8c860;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#f0a818;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#f4b840;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#d96b1f"></span>
+            </div>
+            <span class="stage-label">昼・盛り</span>
+          </div>
+          <div class="stage">
+            <div class="bloom s-wilt" style="animation-delay:.23s">
+              <span class="petal" style="background:#b08038;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#a07430;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#b08038;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#986e2c;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#b08038;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#a07430;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#d96b1f"></span>
+            </div>
+            <span class="stage-label">夕・しぼみ</span>
+          </div>
+        </div>
+        <p class="caption">高原一面を黄に染めるニッコウキスゲ。萱草色(かんぞういろ)を軸にした、忘れ草の中核。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#f0a818"></span><span class="sw-name">萱草色<span>かんぞういろ</span></span><span class="sw-meta">#F0A818<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#f8c860"></span><span class="sw-name">山吹<span>やまぶき</span></span><span class="sw-meta">#F8C860<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#d96b1f"></span><span class="sw-name">柑子色<span>こうじいろ</span></span><span class="sw-meta">#D96B1F<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#b08038"></span><span class="sw-name">朽葉<span>くちば</span></span><span class="sw-meta">#B08038<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">高原だより</div>
+          <div class="m-title">黄の野を歩く</div>
+          <p class="m-body">ニッコウキスゲの群れ咲く湿原を、見頃とともに記録する観察ノート。</p>
+          <div class="m-row"><button class="m-btn">記録する</button><button class="m-btn ghost">地図を見る</button><span class="m-pill">見頃</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t2">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×萱草)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>典拠と色の構成</h4>
+        <p><b>萱草色(かんぞういろ)</b>は萱草(ワスレグサ)の花の色に由来する実在の伝統色で、明るい黄みの橙。福田邦夫『色の名前事典』は「強い赤みの黄」とし、平安期から用いられた色名とします(HEXは目安で #FDA900〜#F8B862 等、出典で差があります)。源氏物語「葵」には喪の<b>「萱草の袴」</b>が見え、忘れ草にちなみ喪・忌色にも用いられました。このテーマは萱草色を軸に、山吹・柑子など黄〜橙の伝統色で構成しています。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ③ 赤橙 ───────── -->
+  <section class="theme t3" id="theme-t3">
+    <div class="theme-head"><span class="theme-name">赤橙</span><span class="theme-yomi">AKA-DAIDAI ・ ノカンゾウ・ヤブカンゾウ</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#e2622a"></span>橙・黄丹・緋 ― 野に咲くカンゾウの赤橙</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">一日花の移ろい</div>
+        <div class="dayflower" aria-label="赤橙・一日花のつぼみ/開花/しぼみ">
+          <div class="stage">
+            <div class="bloom s-bud" style="animation-delay:.05s">
+              <span class="petal" style="background:#d4551f;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#e2622a;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#c84e1c;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#d4551f;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#e2622a;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#c84e1c;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#f0935a"></span>
+            </div>
+            <span class="stage-label">朝・蕾</span>
+          </div>
+          <div class="stage">
+            <div class="bloom" style="animation-delay:.14s">
+              <span class="petal" style="background:#f0935a;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#e2622a;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#ea7a40;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#f0935a;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#e2622a;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#ea7a40;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#c62f24"></span>
+            </div>
+            <span class="stage-label">昼・盛り</span>
+          </div>
+          <div class="stage">
+            <div class="bloom s-wilt" style="animation-delay:.23s">
+              <span class="petal" style="background:#b06a40;transform:translate(-50%,-100%) rotate(0deg)"></span>
+              <span class="petal" style="background:#a05e38;transform:translate(-50%,-100%) rotate(60deg)"></span>
+              <span class="petal" style="background:#b06a40;transform:translate(-50%,-100%) rotate(120deg)"></span>
+              <span class="petal" style="background:#985634;transform:translate(-50%,-100%) rotate(180deg)"></span>
+              <span class="petal" style="background:#b06a40;transform:translate(-50%,-100%) rotate(240deg)"></span>
+              <span class="petal" style="background:#a05e38;transform:translate(-50%,-100%) rotate(300deg)"></span>
+              <span class="core" style="background:#c62f24"></span>
+            </div>
+            <span class="stage-label">夕・しぼみ</span>
+          </div>
+        </div>
+        <p class="caption">野や土手に咲くノカンゾウ、八重のヤブカンゾウ。日に深く染まる赤橙で締めくくる。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#e2622a"></span><span class="sw-name">橙<span>だいだい</span></span><span class="sw-meta">#E2622A<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#f0935a"></span><span class="sw-name">黄丹<span>おうに</span></span><span class="sw-meta">#F0935A<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#c62f24"></span><span class="sw-name">緋<span>ひ</span></span><span class="sw-meta">#C62F24<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#b06a40"></span><span class="sw-name">焦香<span>こがれこう</span></span><span class="sw-meta">#B06A40<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">日々の色</div>
+          <div class="m-title">赤に咲くまで</div>
+          <p class="m-body">朝ひらき夕にしぼむ花の、その日の濃さを一枚ずつ残す写真日記。</p>
+          <div class="m-row"><button class="m-btn">投稿する</button><button class="m-btn ghost">下書き</button><span class="m-pill">満開</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t3">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×橙)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>典拠と色の構成</h4>
+        <p>ノカンゾウは橙〜橙赤、ヤブカンゾウは八重の濃い橙。萱草の赤橙側を、<b>橙(だいだい)・黄丹(おうに)・緋(ひ)</b>など黄赤〜赤の伝統色で構成しました。<b>黄丹</b>は萱草色と同じ紅花＋クチナシ系統の染料で、皇太子の袍に用いる格高い禁色。<b>緋</b>は茜染めの鮮やかな赤。色名のHEXは目安で、実際の花色は個体差が大きく一致しません。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ───────── トークン書き出し ───────── -->
+<div class="wrap">
+  <section class="tokens">
+    <div class="tokens-head">
+      <h2>CSS 変数 (Design Tokens)</h2>
+      <button class="copy-btn" onclick="copyTokens()" id="copyBtn">コピー</button>
+    </div>
+    <p>そのまま開発に貼り付けられる形です。<code>[data-theme]</code> でテーマ(<code>usuki</code> / <code>ki-daidai</code> / <code>aka-daidai</code>)を、<code>[data-mode="light"]</code> でライト版を切り替えます。Docker / devcontainer 上のフロントにもそのまま読み込めます。</p>
+    <pre id="tokenBlock"></pre>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <b>この見本について。</b>
+    色名と配色は、忘れ草(ワスレグサ属/カンゾウ)の同属各種の花色を日本の伝統色に対応づけたものです。軸となる萱草色は実在の伝統色ですが、「淡黄」「黄橙」「赤橙」というテーマ名は色域を示す呼称で、固有の色目名ではありません。
+    なお<b>かさね色目の「萱草」は、季節の美を競う通常の襲色目には含まれず</b>、表裏とも萱草色を用いる喪服の特殊な色目として説明されるもので、平安伝来の季節色目と断定はできません。花色は個体差・環境で大きく変わり、各HEXはWeb表示・可読性のために調整した目安です。
+    <div class="src">コントラスト比は表示中のモードの実際の色から算出。ライト版の副え見出し・差し色は文字用に濃色(secondary-ink / accent-ink)を割り当て、彩りのチップには鮮やかな色をそのまま使っています。忘れ草=憂いを忘れる草というモチーフは『万葉集』(大伴家持ほか)以来詠まれ、中国・嵆康『養生論』の「萱草忘憂」が背景にあります。</div>
+  </footer>
+</div>
+
+<script>
+  function setMode(mode){
+    document.documentElement.dataset.mode=mode;
+    document.getElementById('btn-dark').setAttribute('aria-pressed',mode==='dark');
+    document.getElementById('btn-light').setAttribute('aria-pressed',mode==='light');
+    requestAnimationFrame(()=>{updateAllContrast();renderTokens();});
+  }
+  function hexToRgb(h){
+    h=h.trim().replace('#','');
+    if(h.length===3) h=h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.substr(i,2),16));
+  }
+  function lum(h){
+    const [r,g,b]=hexToRgb(h).map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+    return 0.2126*r+0.7152*g+0.0722*b;
+  }
+  function ratio(a,b){const l1=lum(a),l2=lum(b),hi=Math.max(l1,l2),lo=Math.min(l1,l2);return (hi+0.05)/(lo+0.05);}
+  function judge(r,type){
+    if(type==='ui'||type==='large') return r>=4.5?'AAA':(r>=3?'AA':'NG');
+    return r>=7?'AAA':(r>=4.5?'AA':'NG');
+  }
+  function cssVar(el,name){return getComputedStyle(el).getPropertyValue(name).trim();}
+  function updateAllContrast(){
+    document.querySelectorAll('.ctab').forEach(tab=>{
+      const scope=document.getElementById(tab.dataset.themeScope);
+      tab.querySelectorAll('.row[data-fg]').forEach(row=>{
+        const fg=cssVar(scope,row.dataset.fg), bg=cssVar(scope,row.dataset.bg);
+        if(!fg||!bg) return;
+        const r=ratio(fg,bg), j=judge(r,row.dataset.type);
+        row.querySelector('.c-ratio').textContent=r.toFixed(2)+':1';
+        const b=row.querySelector('.badge'); b.textContent=j; b.className='badge '+j;
+      });
+    });
+  }
+
+  const TOKENS={
+    'usuki':{
+      dark:{ground:'#1c1a10',surface:'#2a2716',primary:'#d9b54a','primary-btn':'#caa53c','on-primary':'#1a1608',secondary:'#e8d27a','secondary-ink':'#e8d27a',accent:'#c98a3a','accent-ink':'#e0a85c',muted:'#9a8b52',text:'#f1ead2','text-dim':'#bdb48c'},
+      light:{ground:'#f7f2df',surface:'#fcf9ee',primary:'#9a7d1e','primary-btn':'#8a6f18','on-primary':'#fff8e6',secondary:'#caa53c','secondary-ink':'#7a6310',accent:'#b06d1a','accent-ink':'#8a5310',muted:'#9a8b52',text:'#3a3012','text-dim':'#6a5f38'}
+    },
+    'ki-daidai':{
+      dark:{ground:'#241606',surface:'#352208',primary:'#f0a818','primary-btn':'#e09810','on-primary':'#241200',secondary:'#f8c860','secondary-ink':'#f8c860',accent:'#d96b1f','accent-ink':'#ef9050',muted:'#b08038',text:'#f6e8cf','text-dim':'#c8ab85'},
+      light:{ground:'#fdf3df',surface:'#fffaef',primary:'#b56a08','primary-btn':'#a85e06','on-primary':'#fff6e4',secondary:'#e09810','secondary-ink':'#8a5a08',accent:'#c2521a','accent-ink':'#a83f12',muted:'#b08038',text:'#3d2608','text-dim':'#6e5224'}
+    },
+    'aka-daidai':{
+      dark:{ground:'#2a1006',surface:'#3d1a09',primary:'#e2622a','primary-btn':'#c84e1c','on-primary':'#ffffff',secondary:'#f0935a','secondary-ink':'#f0935a',accent:'#c62f24','accent-ink':'#e8746a',muted:'#b06a40',text:'#f6e0d0','text-dim':'#cca088'},
+      light:{ground:'#fbeee4',surface:'#fef7f1',primary:'#c2441a','primary-btn':'#b53c14','on-primary':'#ffffff',secondary:'#e2622a','secondary-ink':'#a83815',accent:'#b02018','accent-ink':'#9a1c14',muted:'#b06a40',text:'#3d1c0e','text-dim':'#6e4530'}
+    }
+  };
+  const LABEL={'usuki':'淡黄 / usuki','ki-daidai':'黄橙 / ki-daidai','aka-daidai':'赤橙 / aka-daidai'};
+  function tokenText(){
+    let out='';
+    for(const [theme,m] of Object.entries(TOKENS)){
+      out+=`/* ${LABEL[theme]} ── 既定(宵 / dark) */\n[data-theme="${theme}"]{\n`;
+      for(const [k,v] of Object.entries(m.dark)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n/* ${LABEL[theme]} ── 朝 / light */\n[data-theme="${theme}"][data-mode="light"]{\n`;
+      for(const [k,v] of Object.entries(m.light)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n\n`;
+    }
+    return out.trimEnd();
+  }
+  function renderTokens(){document.getElementById('tokenBlock').textContent=tokenText();}
+  function copyTokens(){
+    const btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(tokenText()).then(()=>{
+      btn.textContent='コピーしました ✓';setTimeout(()=>btn.textContent='コピー',1800);
+    }).catch(()=>{btn.textContent='コピー不可';setTimeout(()=>btn.textContent='コピー',1800);});
+  }
+  updateAllContrast();
+  renderTokens();
+</script>
+</body>
+</html>
+ 

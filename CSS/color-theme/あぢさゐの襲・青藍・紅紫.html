@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ヤマアジサイのカラーテーマ ― あぢさゐの襲・青藍・紅紫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ ページ共通(クローム) ============ */
+  html[data-mode="dark"]{
+    --page-bg:#12131a; --page-ink:#e8e6ef; --page-dim:#9b97ad;
+    --hair:rgba(232,230,239,.13); --panel:#1c1d26;
+  }
+  html[data-mode="light"]{
+    --page-bg:#e6e4ee; --page-ink:#241f30; --page-dim:#6a6478;
+    --hair:rgba(36,31,48,.15); --panel:#efedf5;
+  }
+  :root{
+    --serif:"Shippori Mincho B1",serif;
+    --sans:"Zen Kaku Gothic New",sans-serif;
+  }
+
+  /* ============ ① あぢさゐの襲(夏の青紫) ============ */
+  .theme.t1{
+    --color-ground:#141a2b; --color-surface:#1f2740;
+    --color-primary:#3f6fb0; --color-primary-btn:#3f6fb0; --color-on-primary:#fff;
+    --color-secondary:#9fa6d6; --color-secondary-ink:#9fa6d6;
+    --color-accent:#c29dc8;   --color-accent-ink:#c29dc8;
+    --color-muted:#507ea4; --color-text:#e6e9f2; --color-text-dim:#a3a8c4;
+  }
+  html[data-mode="light"] .theme.t1{
+    --color-ground:#eef0f7; --color-surface:#f6f7fb;
+    --color-primary:#3a5f97; --color-primary-btn:#3a5f97; --color-on-primary:#fff;
+    --color-secondary:#915c8b; --color-secondary-ink:#5a5f8a;
+    --color-accent:#884898;   --color-accent-ink:#7a4f86;
+    --color-muted:#507ea4; --color-text:#1f2440; --color-text-dim:#5a5d72;
+  }
+
+  /* ============ ② 青・藍系 ============ */
+  .theme.t2{
+    --color-ground:#0e1f2b; --color-surface:#16303f;
+    --color-primary:#1f7d9c; --color-primary-btn:#1f7d9c; --color-on-primary:#fff;
+    --color-secondary:#5fc2d8; --color-secondary-ink:#5fc2d8;
+    --color-accent:#7fb0d8;   --color-accent-ink:#7fb0d8;
+    --color-muted:#3f499f; --color-text:#e1eef2; --color-text-dim:#9bc0cc;
+  }
+  html[data-mode="light"] .theme.t2{
+    --color-ground:#e8f1f4; --color-surface:#f3f8fa;
+    --color-primary:#147088; --color-primary-btn:#147088; --color-on-primary:#fff;
+    --color-secondary:#00a3af; --color-secondary-ink:#2a6f86;
+    --color-accent:#234b6a;   --color-accent-ink:#2a5d8a;
+    --color-muted:#3f499f; --color-text:#10303a; --color-text-dim:#4a6470;
+  }
+
+  /* ============ ③ 紅・紫系 ============ */
+  .theme.t3{
+    --color-ground:#2a1422; --color-surface:#3d2031;
+    --color-primary:#c43f78; --color-primary-btn:#c43f78; --color-on-primary:#fff;
+    --color-secondary:#e98ab0; --color-secondary-ink:#e98ab0;
+    --color-accent:#c79bd6;   --color-accent-ink:#c79bd6;
+    --color-muted:#9d5b8b; --color-text:#f3e4ec; --color-text-dim:#c9a3ba;
+  }
+  html[data-mode="light"] .theme.t3{
+    --color-ground:#f8eef3; --color-surface:#fcf6f9;
+    --color-primary:#b8336a; --color-primary-btn:#b8336a; --color-on-primary:#fff;
+    --color-secondary:#e7609e; --color-secondary-ink:#a8447a;
+    --color-accent:#9d5b8b;   --color-accent-ink:#8a4f9c;
+    --color-muted:#9d5b8b; --color-text:#3a1d2c; --color-text-dim:#6e5260;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;min-height:100%;background:var(--page-bg);transition:background .5s ease}
+  /* ビューポート全体を覆う固定背景レイヤー(描画環境に依存せず確実に切替) */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--page-bg);transition:background .5s ease}
+  body{
+    background:var(--page-bg); color:var(--page-ink);
+    min-height:100vh; font-family:var(--sans); line-height:1.8;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    transition:background .5s ease,color .5s ease;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── トグル ── */
+  .topbar{position:sticky;top:0;z-index:50;background:var(--panel);background:color-mix(in srgb,var(--page-bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.14em}
+  .brand small{color:var(--page-dim);font-family:var(--sans);font-size:.66rem;letter-spacing:.3em;margin-left:10px}
+  .toggle{display:inline-flex;border:1px solid var(--hair);border-radius:999px;overflow:hidden;font-size:.78rem}
+  .toggle button{background:transparent;border:none;color:var(--page-dim);font-family:var(--sans);padding:8px 18px;cursor:pointer;letter-spacing:.1em;transition:background .2s,color .2s}
+  .toggle button[aria-pressed="true"]{background:var(--page-ink);color:var(--page-bg);font-weight:700}
+
+  /* ── ヘッダー ── */
+  header{padding:74px 0 48px}
+  .eyebrow{font-size:.74rem;letter-spacing:.42em;color:var(--page-dim);text-transform:uppercase;display:flex;align-items:center;gap:16px;margin-bottom:28px}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--hair)}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.4rem,6.5vw,4.6rem);line-height:1.14;letter-spacing:.03em}
+  .lead{margin-top:26px;max-width:40em;font-size:1.02rem;color:var(--page-dim)}
+  .lead b{color:var(--page-ink);font-weight:500}
+
+  /* ── テーマ縦並び ── */
+  .theme{padding:58px 0;border-top:1px solid var(--hair)}
+  .theme-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .theme-name{font-family:var(--serif);font-weight:700;font-size:2.3rem;letter-spacing:.05em}
+  .theme-yomi{font-size:.78rem;letter-spacing:.32em;color:var(--page-dim)}
+  .theme-tag{margin-top:6px;font-size:.92rem;color:var(--page-dim);display:flex;align-items:center;gap:10px}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;margin-top:30px;align-items:start}
+
+  /* ── 署名：装飾花(萼)の集まり ── */
+  .gaku{display:flex;flex-wrap:wrap;gap:13px;padding:6px 0 2px;max-width:360px}
+  .floret{
+    width:74px;height:74px;position:relative;flex:none;
+    transform:rotate(45deg);
+    opacity:0;animation:bloom .65s cubic-bezier(.2,.8,.2,1) forwards;
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .floret .petal{
+    position:absolute;width:50%;height:50%;border-radius:42% 0 42% 0;
+    box-shadow:0 4px 12px rgba(0,0,0,.22);
+  }
+  .floret .p1{top:0;left:0;border-radius:46% 0 46% 46%}
+  .floret .p2{top:0;right:0;border-radius:0 46% 46% 46%}
+  .floret .p3{bottom:0;left:0;border-radius:46% 46% 46% 0}
+  .floret .p4{bottom:0;right:0;border-radius:46% 46% 0 46%}
+  .floret .core{position:absolute;width:22%;height:22%;top:39%;left:39%;border-radius:50%;background:rgba(255,255,255,.55)}
+  .floret:hover{transform:rotate(45deg) scale(1.12)}
+  @keyframes bloom{to{opacity:1}}
+  .caption{font-size:.84rem;color:var(--page-dim);margin-top:16px}
+
+  /* ── 色一覧 ── */
+  .swatches{margin-top:4px}
+  .sw{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--hair)}
+  .sw-chip{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)}
+  .sw-name{font-family:var(--serif);font-size:1.02rem}
+  .sw-name span{font-family:var(--sans);font-size:.7rem;letter-spacing:.18em;color:var(--page-dim);margin-left:9px}
+  .sw-meta{text-align:right;font-size:.72rem;letter-spacing:.1em;color:var(--page-dim)}
+  .sw-meta .role{display:block;color:var(--page-ink);font-size:.76rem;letter-spacing:.14em}
+
+  .mini-h{margin-top:30px;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--page-dim);display:flex;align-items:center;gap:14px}
+  .mini-h:first-child{margin-top:0}
+  .mini-h::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+  /* ── 適用プレビュー ── */
+  .mock{margin-top:18px;border-radius:16px;padding:24px;border:1px solid var(--hair);background:var(--color-ground);color:var(--color-text);transition:background .5s,color .5s}
+  .mock .m-eyebrow{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--color-secondary-ink)}
+  .mock .m-title{font-family:var(--serif);font-size:1.4rem;margin:8px 0 6px;font-weight:600}
+  .mock .m-body{font-size:.88rem;color:var(--color-text-dim);margin-bottom:18px}
+  .mock .m-row{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+  .m-btn{border:none;border-radius:9px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .15s,filter .15s;background:var(--color-primary-btn);color:var(--color-on-primary)}
+  .m-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .m-btn.ghost{background:transparent;border:1.5px solid var(--color-secondary-ink);color:var(--color-secondary-ink);font-weight:500}
+  .m-pill{font-size:.72rem;padding:5px 12px;border-radius:999px;font-weight:700;letter-spacing:.06em;background:var(--color-accent);color:#1a1018}
+  html[data-mode="dark"] .m-pill{color:#1a1018}
+
+  /* ── コントラスト表 ── */
+  .ctab{margin-top:18px;border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  .ctab .row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;padding:10px 16px;font-size:.84rem;border-bottom:1px solid var(--hair)}
+  .ctab .row:last-child{border-bottom:none}
+  .ctab .row.head{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--page-dim);background:var(--panel)}
+  .c-ratio{font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem}
+  .badge{font-size:.64rem;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:6px;min-width:42px;text-align:center}
+  .badge.AAA{background:#1f7a4d;color:#fff}
+  .badge.AA{background:#3a7ab5;color:#fff}
+  .badge.NG{background:#b23b3b;color:#fff}
+  .ctab .note-line{padding:9px 16px;font-size:.72rem;color:var(--page-dim);background:var(--panel)}
+
+  /* ── 典拠メモ ── */
+  .note{margin-top:26px;padding:20px 22px;border-radius:12px;background:var(--panel);border:1px solid var(--hair);font-size:.86rem;color:var(--page-dim);line-height:1.85;grid-column:1 / -1}
+  .note h4{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--page-ink);margin-bottom:10px;font-weight:700}
+  .note b{color:var(--page-ink);font-weight:500}
+  .note.caveat{border-left:3px solid #c79a3a}
+
+  /* ── トークン ── */
+  .tokens{padding:58px 0 20px;border-top:1px solid var(--hair)}
+  .tokens-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+  .tokens h2{font-family:var(--serif);font-size:1.8rem;font-weight:700;letter-spacing:.04em}
+  .tokens p{color:var(--page-dim);font-size:.9rem;max-width:48em;margin-bottom:22px}
+  .tokens code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--panel);padding:1px 6px;border-radius:5px}
+  .copy-btn{background:var(--page-ink);color:var(--page-bg);border:none;border-radius:8px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.06em;cursor:pointer;transition:filter .2s}
+  .copy-btn:hover{filter:brightness(1.1)}
+  pre{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:22px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;line-height:1.7;color:var(--page-ink)}
+
+  footer{border-top:1px solid var(--hair);margin-top:36px;padding:42px 0 70px;font-size:.8rem;color:var(--page-dim);line-height:1.9}
+  footer b{color:var(--page-ink);font-weight:500}
+  footer .src{margin-top:12px;font-size:.74rem;opacity:.85}
+
+  @media(max-width:780px){
+    .grid{grid-template-columns:1fr;gap:30px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .floret{animation:none;opacity:1}
+    body,.mock{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">山あぢさゐ<small>YAMA-AJISAI</small></div>
+    <div class="toggle" role="group" aria-label="表示モード切替">
+      <button id="btn-dark" aria-pressed="true" onclick="setMode('dark')">夜 Dark</button>
+      <button id="btn-light" aria-pressed="false" onclick="setMode('light')">昼 Light</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">日本在来 ・ 山紫陽花</div>
+    <h1>ヤマアジサイの<br>three themes</h1>
+    <p class="lead">
+      山あいの沢沿いに自生する在来のヤマアジサイ。土の酸度や日ざしで花色が移ろい<b>「七変化」</b>とも呼ばれます。
+      その色幅から<b>三つの</b>カラーテーマを仕立てました。装飾花(萼)の集まりを並べ、<b>夜(ダーク)と昼(ライト)</b>を切り替えられ、
+      主要な配色には<b>WCAGコントラスト比</b>を表示しています。
+    </p>
+  </header>
+</div>
+
+<div class="wrap">
+
+  <!-- ───────── ① あぢさゐの襲 ───────── -->
+  <section class="theme t1" id="theme-t1">
+    <div class="theme-head"><span class="theme-name">あぢさゐの襲</span><span class="theme-yomi">AJISAI NO KASANE ・ 夏の青紫</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#3f6fb0"></span>縹・二藍・薄紫 ― 平安の夏のかさね色目に寄せて</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">装飾花の集まり</div>
+        <div class="gaku" aria-label="あぢさゐの襲の装飾花">
+          <div class="floret" style="animation-delay:.04s"><div class="petal p1" style="background:#507ea4"></div><div class="petal p2" style="background:#3f6fb0"></div><div class="petal p3" style="background:#6f8fc4"></div><div class="petal p4" style="background:#4a7ab0"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.10s"><div class="petal p1" style="background:#915c8b"></div><div class="petal p2" style="background:#a06fa0"></div><div class="petal p3" style="background:#7d5286"></div><div class="petal p4" style="background:#915c8b"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.16s"><div class="petal p1" style="background:#c29dc8"></div><div class="petal p2" style="background:#b48bbf"></div><div class="petal p3" style="background:#c8a6cf"></div><div class="petal p4" style="background:#bf9ac7"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.22s"><div class="petal p1" style="background:#6f8fc4"></div><div class="petal p2" style="background:#507ea4"></div><div class="petal p3" style="background:#4a7ab0"></div><div class="petal p4" style="background:#5d83b5"></div><div class="core"></div></div>
+        </div>
+        <p class="caption">縹から二藍、薄紫へ。一株のなかに青と紫が混ざり合う、移ろいの色。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#3f6fb0"></span><span class="sw-name">縹<span>はなだ</span></span><span class="sw-meta">#3F6FB0<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#915c8b"></span><span class="sw-name">二藍<span>ふたあい</span></span><span class="sw-meta">#915C8B<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#c29dc8"></span><span class="sw-name">薄紫<span>うすむらさき</span></span><span class="sw-meta">#C29DC8<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#507ea4"></span><span class="sw-name">薄縹<span>うすはなだ</span></span><span class="sw-meta">#507EA4<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">梅雨の便り</div>
+          <div class="m-title">あぢさゐ咲く頃に</div>
+          <p class="m-body">雨の濃淡で色を変える花の、今日のうつろいを綴るノート。</p>
+          <div class="m-row"><button class="m-btn">書きはじめる</button><button class="m-btn ghost">下書き</button><span class="m-pill">五月雨</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t1">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×縹)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>平安の重ね色目に<b>「紫陽花」という名の色目は、古典の有職故実書にも標準的な色目集にも確認できません</b>。万葉集に「あぢさゐ」は詠まれますが、装束のかさね色目には採られませんでした。このテーマは<b>典拠のある夏の青紫系色目(露草=縹・薄縹、棟=薄紫・青、二藍など)に寄せた現代の再構成</b>です。「青」は平安では緑を指す語でしたが、ここでは現代の紫陽花のイメージに合わせ青系で構成しています。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ② 青・藍系 ───────── -->
+  <section class="theme t2" id="theme-t2">
+    <div class="theme-head"><span class="theme-name">青・藍</span><span class="theme-yomi">AO ・ AI ― 澄んだ青花</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#1f7d9c"></span>藍姫・伊予の青絣・七段花 ― 酸性の土が生む青</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">装飾花の集まり</div>
+        <div class="gaku" aria-label="青・藍系の装飾花">
+          <div class="floret" style="animation-delay:.04s"><div class="petal p1" style="background:#2792c3"></div><div class="petal p2" style="background:#1f7d9c"></div><div class="petal p3" style="background:#38a1db"></div><div class="petal p4" style="background:#2a88b5"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.10s"><div class="petal p1" style="background:#234b6a"></div><div class="petal p2" style="background:#14234b"></div><div class="petal p3" style="background:#2a5d8a"></div><div class="petal p4" style="background:#1d3f5e"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.16s"><div class="petal p1" style="background:#7fb0d8"></div><div class="petal p2" style="background:#5fc2d8"></div><div class="petal p3" style="background:#89c3eb"></div><div class="petal p4" style="background:#7fb0d8"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.22s"><div class="petal p1" style="background:#3f499f"></div><div class="petal p2" style="background:#2a5d8a"></div><div class="petal p3" style="background:#384596"></div><div class="petal p4" style="background:#34508f"></div><div class="core"></div></div>
+        </div>
+        <p class="caption">縹から紺青、群青へ。沢の水を映したような、ひやりと澄んだ青。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#1f7d9c"></span><span class="sw-name">縹色<span>はなだいろ</span></span><span class="sw-meta">#1F7D9C<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#38a1db"></span><span class="sw-name">露草色<span>つゆくさ</span></span><span class="sw-meta">#38A1DB<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#234b6a"></span><span class="sw-name">藍色<span>あいいろ</span></span><span class="sw-meta">#234B6A<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#3f499f"></span><span class="sw-name">群青<span>ぐんじょう</span></span><span class="sw-meta">#3F499F<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">山の沢から</div>
+          <div class="m-title">青花を見にゆく</div>
+          <p class="m-body">藍姫や七段花の咲く場所を、地図とともに記録する観察ノート。</p>
+          <div class="m-row"><button class="m-btn">記録する</button><button class="m-btn ghost">地図を見る</button><span class="m-pill">見頃</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t2">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×縹)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>花色の背景</h4>
+        <p>装飾花の青は、<b>酸性土壌でアルミニウムがイオン化し色素と結びつく</b>ことで生まれます。火山性で酸性土の多い日本では青系が出やすく、<b>藍姫</b>(あいひめ)、<b>伊予の青絣</b>(いよのあおがすり)、シーボルトが記し1959年に六甲で再発見された幻の<b>七段花</b>(しちだんか)などが知られます。色は咲く環境で変わるため、ここでの伝統色対応は典型例です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ③ 紅・紫系 ───────── -->
+  <section class="theme t3" id="theme-t3">
+    <div class="theme-head"><span class="theme-name">紅・紫</span><span class="theme-yomi">KURENAI ・ MURASAKI ― 染まる花</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#c43f78"></span>紅・清澄沢・紅てまり ― 日ざしに染まる紅</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">装飾花の集まり</div>
+        <div class="gaku" aria-label="紅・紫系の装飾花">
+          <div class="floret" style="animation-delay:.04s"><div class="petal p1" style="background:#fa8d94"></div><div class="petal p2" style="background:#eea4c0"></div><div class="petal p3" style="background:#f59aab"></div><div class="petal p4" style="background:#f5949f"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.10s"><div class="petal p1" style="background:#e95295"></div><div class="petal p2" style="background:#e7609e"></div><div class="petal p3" style="background:#d7003a"></div><div class="petal p4" style="background:#e0457f"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.16s"><div class="petal p1" style="background:#c79bd6"></div><div class="petal p2" style="background:#9d5b8b"></div><div class="petal p3" style="background:#b48bbf"></div><div class="petal p4" style="background:#a06fa0"></div><div class="core"></div></div>
+          <div class="floret" style="animation-delay:.22s"><div class="petal p1" style="background:#e7609e"></div><div class="petal p2" style="background:#c43f78"></div><div class="petal p3" style="background:#d7003a"></div><div class="petal p4" style="background:#cf3a6c"></div><div class="core"></div></div>
+        </div>
+        <p class="caption">白から紅梅、躑躅、紅へ。日に当たるほど深く染まってゆく。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#c43f78"></span><span class="sw-name">牡丹色<span>ぼたんいろ</span></span><span class="sw-meta">#C43F78<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#e95295"></span><span class="sw-name">躑躅色<span>つつじ</span></span><span class="sw-meta">#E95295<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#9d5b8b"></span><span class="sw-name">京紫<span>きょうむらさき</span></span><span class="sw-meta">#9D5B8B<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#fa8d94"></span><span class="sw-name">紅梅色<span>こうばい</span></span><span class="sw-meta">#FA8D94<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">日々の色</div>
+          <div class="m-title">紅に染まるまで</div>
+          <p class="m-body">白から紅へ移る花の、その日の濃さを一枚ずつ残す写真日記。</p>
+          <div class="m-row"><button class="m-btn">投稿する</button><button class="m-btn ghost">下書き</button><span class="m-pill">色づき</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t3">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×牡丹)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>花色の背景</h4>
+        <p>中性〜アルカリ性の土ではアルミニウムが吸収されず、色素本来の<b>紅・紅紫</b>が現れます。<b>紅</b>(くれない)は土に左右されず日光で白→ピンク→真紅へ染まる人気種。ほかに白地に紅の覆輪をもつ古品種<b>清澄沢</b>(きよすみさわ)、白から紅へ移る<b>紅てまり</b>などがあります。色は環境で変わるため、伝統色対応は典型例です。</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ───────── トークン書き出し ───────── -->
+<div class="wrap">
+  <section class="tokens">
+    <div class="tokens-head">
+      <h2>CSS 変数 (Design Tokens)</h2>
+      <button class="copy-btn" onclick="copyTokens()" id="copyBtn">コピー</button>
+    </div>
+    <p>そのまま開発に貼り付けられる形です。<code>[data-theme]</code> でテーマ(<code>ajisai-kasane</code> / <code>ao-ai</code> / <code>kurenai-murasaki</code>)を、<code>[data-mode="light"]</code> でライト版を切り替えます。Docker / devcontainer 上のフロントにもそのまま読み込めます。</p>
+    <pre id="tokenBlock"></pre>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <b>この見本について。</b>
+    色名と配色は、平安の夏のかさね色目(露草・棟・二藍など)と、ヤマアジサイ在来品種の花色を日本の伝統色に対応づけたものです。
+    重ね色目「紫陽花」は古典の典拠が確認できず、テーマ①は現代の再構成です。花色は土壌・日照・株齢で大きく変わるため、品種と色の対応は典型例で、各HEXはWeb表示・可読性のために調整した目安です。
+    <div class="src">コントラスト比は表示中のモードの実際の色から算出。ライト版の副え見出し・差し色は文字用に濃色(secondary-ink / accent-ink)を割り当て、彩りのチップには鮮やかな色をそのまま使っています。</div>
+  </footer>
+</div>
+
+<script>
+  function setMode(mode){
+    document.documentElement.dataset.mode=mode;
+    document.getElementById('btn-dark').setAttribute('aria-pressed',mode==='dark');
+    document.getElementById('btn-light').setAttribute('aria-pressed',mode==='light');
+    requestAnimationFrame(()=>{updateAllContrast();renderTokens();});
+  }
+  function hexToRgb(h){
+    h=h.trim().replace('#','');
+    if(h.length===3) h=h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.substr(i,2),16));
+  }
+  function lum(h){
+    const [r,g,b]=hexToRgb(h).map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+    return 0.2126*r+0.7152*g+0.0722*b;
+  }
+  function ratio(a,b){const l1=lum(a),l2=lum(b),hi=Math.max(l1,l2),lo=Math.min(l1,l2);return (hi+0.05)/(lo+0.05);}
+  function judge(r,type){
+    if(type==='ui'||type==='large') return r>=4.5?'AAA':(r>=3?'AA':'NG');
+    return r>=7?'AAA':(r>=4.5?'AA':'NG');
+  }
+  function cssVar(el,name){return getComputedStyle(el).getPropertyValue(name).trim();}
+  function updateAllContrast(){
+    document.querySelectorAll('.ctab').forEach(tab=>{
+      const scope=document.getElementById(tab.dataset.themeScope);
+      tab.querySelectorAll('.row[data-fg]').forEach(row=>{
+        const fg=cssVar(scope,row.dataset.fg), bg=cssVar(scope,row.dataset.bg);
+        if(!fg||!bg) return;
+        const r=ratio(fg,bg), j=judge(r,row.dataset.type);
+        row.querySelector('.c-ratio').textContent=r.toFixed(2)+':1';
+        const b=row.querySelector('.badge'); b.textContent=j; b.className='badge '+j;
+      });
+    });
+  }
+
+  const TOKENS={
+    'ajisai-kasane':{
+      dark:{ground:'#141a2b',surface:'#1f2740',primary:'#3f6fb0','primary-btn':'#3f6fb0','on-primary':'#ffffff',secondary:'#9fa6d6','secondary-ink':'#9fa6d6',accent:'#c29dc8','accent-ink':'#c29dc8',muted:'#507ea4',text:'#e6e9f2','text-dim':'#a3a8c4'},
+      light:{ground:'#eef0f7',surface:'#f6f7fb',primary:'#3a5f97','primary-btn':'#3a5f97','on-primary':'#ffffff',secondary:'#915c8b','secondary-ink':'#5a5f8a',accent:'#884898','accent-ink':'#7a4f86',muted:'#507ea4',text:'#1f2440','text-dim':'#5a5d72'}
+    },
+    'ao-ai':{
+      dark:{ground:'#0e1f2b',surface:'#16303f',primary:'#1f7d9c','primary-btn':'#1f7d9c','on-primary':'#ffffff',secondary:'#5fc2d8','secondary-ink':'#5fc2d8',accent:'#7fb0d8','accent-ink':'#7fb0d8',muted:'#3f499f',text:'#e1eef2','text-dim':'#9bc0cc'},
+      light:{ground:'#e8f1f4',surface:'#f3f8fa',primary:'#147088','primary-btn':'#147088','on-primary':'#ffffff',secondary:'#00a3af','secondary-ink':'#2a6f86',accent:'#234b6a','accent-ink':'#2a5d8a',muted:'#3f499f',text:'#10303a','text-dim':'#4a6470'}
+    },
+    'kurenai-murasaki':{
+      dark:{ground:'#2a1422',surface:'#3d2031',primary:'#c43f78','primary-btn':'#c43f78','on-primary':'#ffffff',secondary:'#e98ab0','secondary-ink':'#e98ab0',accent:'#c79bd6','accent-ink':'#c79bd6',muted:'#9d5b8b',text:'#f3e4ec','text-dim':'#c9a3ba'},
+      light:{ground:'#f8eef3',surface:'#fcf6f9',primary:'#b8336a','primary-btn':'#b8336a','on-primary':'#ffffff',secondary:'#e7609e','secondary-ink':'#a8447a',accent:'#9d5b8b','accent-ink':'#8a4f9c',muted:'#9d5b8b',text:'#3a1d2c','text-dim':'#6e5260'}
+    }
+  };
+  const LABEL={'ajisai-kasane':'あぢさゐの襲 / ajisai-kasane','ao-ai':'青・藍 / ao-ai','kurenai-murasaki':'紅・紫 / kurenai-murasaki'};
+  function tokenText(){
+    let out='';
+    for(const [theme,m] of Object.entries(TOKENS)){
+      out+=`/* ${LABEL[theme]} ── 既定(夜 / dark) */\n[data-theme="${theme}"]{\n`;
+      for(const [k,v] of Object.entries(m.dark)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n/* ${LABEL[theme]} ── 昼 / light */\n[data-theme="${theme}"][data-mode="light"]{\n`;
+      for(const [k,v] of Object.entries(m.light)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n\n`;
+    }
+    return out.trimEnd();
+  }
+  function renderTokens(){document.getElementById('tokenBlock').textContent=tokenText();}
+  function copyTokens(){
+    const btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(tokenText()).then(()=>{
+      btn.textContent='コピーしました ✓';setTimeout(()=>btn.textContent='コピー',1800);
+    }).catch(()=>{btn.textContent='コピー不可';setTimeout(()=>btn.textContent='コピー',1800);});
+  }
+  updateAllContrast();
+  renderTokens();
+</script>
+</body>
+</html>

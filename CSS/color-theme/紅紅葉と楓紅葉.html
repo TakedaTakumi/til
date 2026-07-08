@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重ね色目のカラーテーマ ― 紅紅葉と楓紅葉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ ページ共通(クローム) ============ */
+  html[data-mode="dark"]{
+    --page-bg:#1a1512; --page-ink:#ece2d4; --page-dim:#a89684;
+    --hair:rgba(236,226,212,.14); --panel:#221b16;
+  }
+  html[data-mode="light"]{
+    --page-bg:#e9e1d3; --page-ink:#2a2118; --page-dim:#6f6354;
+    --hair:rgba(40,30,20,.16); --panel:#f1eadd;
+  }
+  :root{
+    --serif:"Shippori Mincho B1",serif;
+    --sans:"Zen Kaku Gothic New",sans-serif;
+  }
+
+  /* ============ 紅紅葉 トークン ============ */
+  .theme.kr{
+    --color-ground:#241317; --color-surface:#3a2126;
+    --color-primary:#c3252b; --color-primary-btn:#c3252b; --color-on-primary:#fff;
+    --color-secondary:#e9a300; --color-secondary-ink:#e9a300;
+    --color-accent:#2e5d45;   --color-accent-ink:#7fae8e;
+    --color-muted:#c9a05e; --color-text:#f2e6d6; --color-text-dim:#b39a86;
+  }
+  html[data-mode="light"] .theme.kr{
+    --color-ground:#f7efe3; --color-surface:#fbf6ec;
+    --color-primary:#b81f27; --color-primary-btn:#b81f27; --color-on-primary:#fff;
+    --color-secondary:#e9a300; --color-secondary-ink:#9a6a00;
+    --color-accent:#2e5d45;   --color-accent-ink:#2e5d45;
+    --color-muted:#b88a3e; --color-text:#3a1d22; --color-text-dim:#6e5a52;
+  }
+
+  /* ============ 楓紅葉 トークン ============ */
+  .theme.kd{
+    --color-ground:#152019; --color-surface:#223029;
+    --color-primary:#4e8a5e; --color-primary-btn:#427a52; --color-on-primary:#fff;
+    --color-secondary:#e4bd3f; --color-secondary-ink:#e4bd3f;
+    --color-accent:#bc2f33;   --color-accent-ink:#e0686c;
+    --color-muted:#a9854a; --color-text:#e8ebde; --color-text-dim:#93a08c;
+  }
+  html[data-mode="light"] .theme.kd{
+    --color-ground:#eef1e6; --color-surface:#f5f7ee;
+    --color-primary:#3d7350; --color-primary-btn:#3d7350; --color-on-primary:#fff;
+    --color-secondary:#e4bd3f; --color-secondary-ink:#8a6e00;
+    --color-accent:#bc2f33;   --color-accent-ink:#b32a2e;
+    --color-muted:#9c7a43; --color-text:#1c2b22; --color-text-dim:#5a6a5c;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;min-height:100%;background:var(--page-bg);transition:background .5s ease}
+  /* ビューポート全体を覆う固定背景レイヤー(描画環境に依存せず確実に切替) */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--page-bg);transition:background .5s ease}
+  body{
+    background:var(--page-bg); color:var(--page-ink);
+    min-height:100vh;
+    font-family:var(--sans); line-height:1.8;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    transition:background .5s ease,color .5s ease;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* ── トグル ── */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--panel);
+    background:color-mix(in srgb,var(--page-bg) 88%,transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hair);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.14em}
+  .brand small{color:var(--page-dim);font-family:var(--sans);font-size:.66rem;letter-spacing:.3em;margin-left:10px}
+  .toggle{
+    display:inline-flex;border:1px solid var(--hair);border-radius:999px;
+    overflow:hidden;font-size:.78rem;
+  }
+  .toggle button{
+    background:transparent;border:none;color:var(--page-dim);
+    font-family:var(--sans);padding:8px 18px;cursor:pointer;letter-spacing:.1em;
+    transition:background .2s,color .2s;
+  }
+  .toggle button[aria-pressed="true"]{background:var(--page-ink);color:var(--page-bg);font-weight:700}
+
+  /* ── ヘッダー ── */
+  header{padding:76px 0 50px}
+  .eyebrow{
+    font-size:.74rem;letter-spacing:.42em;color:var(--page-dim);
+    text-transform:uppercase;display:flex;align-items:center;gap:16px;margin-bottom:28px;
+  }
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--hair)}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.6rem,7vw,5.2rem);line-height:1.12;letter-spacing:.04em}
+  h1 .amp{color:var(--page-dim);font-size:.5em;font-weight:500;margin:0 .28em;vertical-align:.12em}
+  .lead{margin-top:28px;max-width:38em;font-size:1.04rem;color:var(--page-dim)}
+  .lead b{color:var(--page-ink);font-weight:500}
+
+  /* ── テーマ2列 ── */
+  .themes{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--hair)}
+  .theme{padding:60px 0;position:relative}
+  .theme.kr{padding-right:54px;border-right:1px solid var(--hair)}
+  .theme.kd{padding-left:54px}
+  .theme-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px}
+  .theme-name{font-family:var(--serif);font-weight:700;font-size:2.5rem;letter-spacing:.06em}
+  .theme-yomi{font-size:.8rem;letter-spacing:.34em;color:var(--page-dim)}
+  .theme-tag{margin-top:6px;font-size:.92rem;color:var(--page-dim);display:flex;align-items:center;gap:10px}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+  /* ── 署名：袖口の重なり ── */
+  .sode{margin:34px 0 10px;position:relative;display:flex;flex-direction:column}
+  .layer{
+    height:62px;border-radius:0 0 22px 22px;margin-top:-30px;position:relative;
+    box-shadow:0 -1px 0 rgba(255,255,255,.10) inset,0 14px 26px rgba(0,0,0,.30);
+    display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 9px;
+    transition:margin-top .55s cubic-bezier(.2,.8,.2,1),transform .4s cubic-bezier(.2,.8,.2,1);
+    opacity:0;transform:translateY(-18px);animation:settle .7s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .layer:first-child{margin-top:0}
+  .layer .l-name{font-family:var(--serif);font-size:1.04rem;font-weight:600}
+  .layer .l-hex{font-family:var(--sans);font-size:.7rem;letter-spacing:.12em;opacity:.9}
+  .sode:hover .layer{margin-top:-12px}
+  .sode:hover .layer:first-child{margin-top:0}
+  .layer:hover{transform:translateY(-6px) scale(1.012);z-index:5}
+  @keyframes settle{to{opacity:1;transform:translateY(0)}}
+  .caption{font-size:.84rem;color:var(--page-dim);margin-top:8px}
+
+  /* ── 色一覧 ── */
+  .swatches{margin-top:30px}
+  .sw{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--hair)}
+  .sw-chip{width:34px;height:34px;border-radius:7px;border:1px solid rgba(128,128,128,.25)}
+  .sw-name{font-family:var(--serif);font-size:1.06rem}
+  .sw-name span{font-family:var(--sans);font-size:.72rem;letter-spacing:.2em;color:var(--page-dim);margin-left:10px}
+  .sw-meta{text-align:right;font-size:.74rem;letter-spacing:.1em;color:var(--page-dim)}
+  .sw-meta .role{display:block;color:var(--page-ink);font-size:.78rem;letter-spacing:.16em}
+
+  /* ── 小見出し ── */
+  .mini-h{margin-top:42px;font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--page-dim);display:flex;align-items:center;gap:14px}
+  .mini-h::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+  /* ── 適用プレビュー ── */
+  .mock{margin-top:20px;border-radius:16px;padding:26px;border:1px solid var(--hair);background:var(--color-ground);color:var(--color-text);transition:background .5s,color .5s}
+  .mock .m-eyebrow{font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--color-secondary-ink)}
+  .mock .m-title{font-family:var(--serif);font-size:1.5rem;margin:8px 0 6px;font-weight:600}
+  .mock .m-body{font-size:.9rem;color:var(--color-text-dim);margin-bottom:20px;max-width:30em}
+  .mock .m-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .m-btn{border:none;border-radius:9px;padding:11px 22px;font-family:var(--sans);font-weight:700;font-size:.9rem;cursor:pointer;transition:transform .15s,filter .15s;background:var(--color-primary-btn);color:var(--color-on-primary)}
+  .m-btn:hover{transform:translateY(-2px);filter:brightness(1.07)}
+  .m-btn.ghost{background:transparent;border:1.5px solid var(--color-secondary-ink);color:var(--color-secondary-ink);font-weight:500}
+  .m-pill{font-size:.74rem;padding:5px 13px;border-radius:999px;font-weight:700;letter-spacing:.06em;background:var(--color-accent);color:#fff}
+  html[data-mode="light"] .theme.kr .m-pill{color:#fff}
+
+  /* ── コントラスト表 ── */
+  .ctab{margin-top:20px;border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  .ctab .row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;padding:11px 18px;font-size:.86rem;border-bottom:1px solid var(--hair)}
+  .ctab .row:last-child{border-bottom:none}
+  .ctab .row.head{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--page-dim);background:var(--panel)}
+  .c-ratio{font-variant-numeric:tabular-nums;font-weight:700;font-size:.95rem}
+  .badge{font-size:.66rem;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:6px;min-width:42px;text-align:center}
+  .badge.AAA{background:#1f7a4d;color:#fff}
+  .badge.AA{background:#3a7ab5;color:#fff}
+  .badge.NG{background:#b23b3b;color:#fff}
+  .ctab .note-line{padding:10px 18px;font-size:.74rem;color:var(--page-dim);background:var(--panel)}
+
+  /* ── 典拠メモ ── */
+  .note{margin-top:32px;padding:22px 24px;border-radius:12px;background:var(--panel);border:1px solid var(--hair);font-size:.88rem;color:var(--page-dim);line-height:1.85}
+  .note h4{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--page-ink);margin-bottom:11px;font-weight:700}
+  .note b{color:var(--page-ink);font-weight:500}
+  .note.caveat{border-left:3px solid #c79a3a}
+
+  /* ── トークン書き出し ── */
+  .tokens{padding:60px 0 20px;border-top:1px solid var(--hair)}
+  .tokens-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+  .tokens h2{font-family:var(--serif);font-size:1.9rem;font-weight:700;letter-spacing:.04em}
+  .tokens p{color:var(--page-dim);font-size:.92rem;max-width:46em;margin-bottom:24px}
+  .copy-btn{background:var(--page-ink);color:var(--page-bg);border:none;border-radius:8px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.06em;cursor:pointer;transition:filter .2s}
+  .copy-btn:hover{filter:brightness(1.1)}
+  pre{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:24px;overflow-x:auto;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.8rem;line-height:1.7;color:var(--page-ink)}
+  pre .c-comment{color:var(--page-dim)}
+  pre .c-prop{color:var(--color-accent-ink,#888)}
+
+  footer{border-top:1px solid var(--hair);margin-top:40px;padding:44px 0 70px;font-size:.82rem;color:var(--page-dim);line-height:1.9}
+  footer b{color:var(--page-ink);font-weight:500}
+  footer .src{margin-top:14px;font-size:.76rem;opacity:.85}
+
+  @media(max-width:820px){
+    .themes{grid-template-columns:1fr}
+    .theme.kr{padding-right:0;border-right:none;border-bottom:1px solid var(--hair)}
+    .theme.kd{padding-left:0}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .layer{animation:none;opacity:1;transform:none}
+    body,.mock{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">かさねの色目<small>KASANE NO IROME</small></div>
+    <div class="toggle" role="group" aria-label="表示モード切替">
+      <button id="btn-dark" aria-pressed="true" onclick="setMode('dark')">墨地 Dark</button>
+      <button id="btn-light" aria-pressed="false" onclick="setMode('light')">練色 Light</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">平安 ・ 秋の重ね色目</div>
+    <h1>紅紅葉<span class="amp">と</span>楓紅葉</h1>
+    <p class="lead">
+      薄い絹を幾重にも重ね、下の色が透けて生まれる色調を季節になぞらえた、平安の<b>かさねの色目</b>。
+      その秋の二つを Web のカラーテーマに仕立てました。色は袖口・裾からのぞく<b>五衣の重なり</b>として並べ、
+      <b>墨地(ダーク)と練色(ライト)</b>を切り替えられます。主要な配色には<b>WCAGコントラスト比</b>を表示しています。
+    </p>
+  </header>
+</div>
+
+<div class="wrap">
+  <div class="themes">
+
+    <!-- ───────── 紅紅葉 ───────── -->
+    <section class="theme kr" id="theme-kr">
+      <div class="theme-head"><span class="theme-name">紅紅葉</span><span class="theme-yomi">KURENAI MOMIJI</span></div>
+      <div class="theme-tag"><span class="dot" style="background:#c3252b"></span>紅(くれなゐ)を基調とした、暖かな秋</div>
+
+      <div class="sode" aria-label="紅紅葉の五衣の重なり">
+        <div class="layer" style="background:#c3252b;color:rgba(255,255,255,.92);animation-delay:.05s"><span class="l-name">紅</span><span class="l-hex">#C3252B</span></div>
+        <div class="layer" style="background:#c9a05e;color:rgba(0,0,0,.6);animation-delay:.12s"><span class="l-name">淡朽葉</span><span class="l-hex">#C9A05E</span></div>
+        <div class="layer" style="background:#e8c24a;color:rgba(0,0,0,.62);animation-delay:.19s"><span class="l-name">黄</span><span class="l-hex">#E8C24A</span></div>
+        <div class="layer" style="background:#2e5d45;color:rgba(255,255,255,.9);animation-delay:.26s"><span class="l-name">濃青</span><span class="l-hex">#2E5D45</span></div>
+        <div class="layer" style="background:#7fa585;color:rgba(0,0,0,.6);animation-delay:.33s"><span class="l-name">淡青</span><span class="l-hex">#7FA585</span></div>
+        <div class="layer" style="background:#b0212a;color:rgba(255,255,255,.92);animation-delay:.40s"><span class="l-name">紅(単)</span><span class="l-hex">#B0212A</span></div>
+      </div>
+      <p class="caption">上の衣から単(ひとえ)まで。紅で始まり紅で締め、青を内に挟んだ移ろい。</p>
+
+      <div class="swatches">
+        <div class="sw"><span class="sw-chip" style="background:#c3252b"></span><span class="sw-name">紅<span>くれなゐ</span></span><span class="sw-meta">#C3252B<span class="role">強調 / Primary</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#e9a300"></span><span class="sw-name">山吹<span>やまぶき</span></span><span class="sw-meta">#E9A300<span class="role">副え / Secondary</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#2e5d45"></span><span class="sw-name">濃青<span>こきあを</span></span><span class="sw-meta">#2E5D45<span class="role">差し色 / Accent</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#c9a05e"></span><span class="sw-name">淡朽葉<span>うすくちば</span></span><span class="sw-meta">#C9A05E<span class="role">中間 / Muted</span></span></div>
+      </div>
+
+      <div class="mini-h">Web に適用すると</div>
+      <div class="mock">
+        <div class="m-eyebrow">秋の便り</div>
+        <div class="m-title">紅葉だより、はじめました</div>
+        <p class="m-body">竜田の山の色づきを、毎朝おとどけします。今日の見頃と、明日の移ろいを。</p>
+        <div class="m-row"><button class="m-btn">購読する</button><button class="m-btn ghost">あとで読む</button><span class="m-pill">見頃</span></div>
+      </div>
+
+      <div class="mini-h">コントラスト比 (WCAG)</div>
+      <div class="ctab" data-theme-scope="theme-kr">
+        <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+        <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×紅)</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="note-line">判定基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAA は本文7.0以上。</div>
+      </div>
+
+      <div class="note">
+        <h4>典拠と色の構成</h4>
+        <p>平安末期<b>『満佐須計装束抄』</b>に「紅・山吹・黄なる・青き濃き薄き・紅の単」と記される秋の五衣。名は紅でも<b>赤一色ではなく、紅から黄を経て青(緑)へ移ろうグラデーション</b>が要です。(中世武家の『雁衣鈔』では「面赤色・裏濃赤色」と真紅になり、時代で色が異なります。)</p>
+      </div>
+    </section>
+
+    <!-- ───────── 楓紅葉 ───────── -->
+    <section class="theme kd" id="theme-kd">
+      <div class="theme-head"><span class="theme-name">楓紅葉</span><span class="theme-yomi">KAEDE MOMIJI</span></div>
+      <div class="theme-tag"><span class="dot" style="background:#4e8a5e"></span>淡青(みどり)から紅へ移ろう、楓の色づき</div>
+
+      <div class="sode" aria-label="楓紅葉の五衣の重なり">
+        <div class="layer" style="background:#8fb07e;color:rgba(0,0,0,.6);animation-delay:.05s"><span class="l-name">淡青</span><span class="l-hex">#8FB07E</span></div>
+        <div class="layer" style="background:#6e9a6a;color:rgba(255,255,255,.92);animation-delay:.12s"><span class="l-name">青</span><span class="l-hex">#6E9A6A</span></div>
+        <div class="layer" style="background:#e4bd3f;color:rgba(0,0,0,.62);animation-delay:.19s"><span class="l-name">黄</span><span class="l-hex">#E4BD3F</span></div>
+        <div class="layer" style="background:#a9854a;color:rgba(255,255,255,.9);animation-delay:.26s"><span class="l-name">淡朽葉</span><span class="l-hex">#A9854A</span></div>
+        <div class="layer" style="background:#bc2f33;color:rgba(255,255,255,.92);animation-delay:.33s"><span class="l-name">紅</span><span class="l-hex">#BC2F33</span></div>
+        <div class="layer" style="background:#87363f;color:rgba(255,255,255,.9);animation-delay:.40s"><span class="l-name">蘇芳(単)</span><span class="l-hex">#87363F</span></div>
+      </div>
+      <p class="caption">緑で始まり紅・蘇芳で結ぶ。一枚の楓が秋を渡る時間を畳んだ配色。</p>
+
+      <div class="swatches">
+        <div class="sw"><span class="sw-chip" style="background:#4e8a5e"></span><span class="sw-name">青<span>あを(緑)</span></span><span class="sw-meta">#4E8A5E<span class="role">強調 / Primary</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#e4bd3f"></span><span class="sw-name">黄<span>き</span></span><span class="sw-meta">#E4BD3F<span class="role">副え / Secondary</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#bc2f33"></span><span class="sw-name">紅<span>くれなゐ</span></span><span class="sw-meta">#BC2F33<span class="role">差し色 / Accent</span></span></div>
+        <div class="sw"><span class="sw-chip" style="background:#a9854a"></span><span class="sw-name">淡朽葉<span>うすくちば</span></span><span class="sw-meta">#A9854A<span class="role">中間 / Muted</span></span></div>
+      </div>
+
+      <div class="mini-h">Web に適用すると</div>
+      <div class="mock">
+        <div class="m-eyebrow">楓の庭</div>
+        <div class="m-title">色づきを、毎日記録する</div>
+        <p class="m-body">青葉から紅へ。一本の楓が変わってゆく時間を、写真と一行でのこすノート。</p>
+        <div class="m-row"><button class="m-btn">はじめる</button><button class="m-btn ghost">見本を見る</button><span class="m-pill">色づき中</span></div>
+      </div>
+
+      <div class="mini-h">コントラスト比 (WCAG)</div>
+      <div class="ctab" data-theme-scope="theme-kd">
+        <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+        <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×青)</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+        <div class="note-line">判定基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAA は本文7.0以上。</div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>「楓紅葉」は<b>古典の原典(『満佐須計装束抄』など)には確認できず</b>、近現代の重ね色目集(長崎盛輝『かさねの色目』系統)由来の可能性が高い色目です。配色は「青紅葉」の変種に近く、<b>淡青(緑)から黄・朽葉を経て紅・蘇芳へ至る移ろい</b>として楓の色づきを表します。</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ───────── トークン書き出し ───────── -->
+<div class="wrap">
+  <section class="tokens">
+    <div class="tokens-head">
+      <h2>CSS 変数 (Design Tokens)</h2>
+      <button class="copy-btn" onclick="copyTokens()" id="copyBtn">コピー</button>
+    </div>
+    <p>そのまま開発に貼り付けられる形です。<code>[data-theme]</code> でテーマを、<code>[data-mode="light"]</code> でライト版を切り替えます。Docker / devcontainer 上のフロントにもそのまま読み込めます。</p>
+    <pre id="tokenBlock"></pre>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <b>この見本について。</b>
+    色名と配色は平安末期『満佐須計装束抄』を中心に、綺陽装束研究所・日本服飾史・長崎盛輝『かさねの色目』等の整理を参照しています。
+    重ね色目の色は文献・流派・時代で解釈が分かれ、伝統色のRGB/HEX値はいずれも目安です。本テーマの各HEXはWeb表示・可読性のために調整した近似値で、史料の厳密な色そのものではありません。
+    <div class="src">コントラスト比は表示中のモードの実際の色から算出しています。ライト版の副え見出し・差し色は文字用に濃色(secondary-ink / accent-ink)を割り当て、彩りのチップには本来の山吹・紅をそのまま使っています。</div>
+  </footer>
+</div>
+
+<script>
+  /* ===== 表示モード切替 ===== */
+  function setMode(mode){
+    document.documentElement.dataset.mode=mode;
+    document.getElementById('btn-dark').setAttribute('aria-pressed',mode==='dark');
+    document.getElementById('btn-light').setAttribute('aria-pressed',mode==='light');
+    requestAnimationFrame(()=>{updateAllContrast();renderTokens();});
+  }
+
+  /* ===== コントラスト計算 ===== */
+  function hexToRgb(h){
+    h=h.trim().replace('#','');
+    if(h.length===3) h=h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.substr(i,2),16));
+  }
+  function lum(h){
+    const [r,g,b]=hexToRgb(h).map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+    return 0.2126*r+0.7152*g+0.0722*b;
+  }
+  function ratio(a,b){const l1=lum(a),l2=lum(b),hi=Math.max(l1,l2),lo=Math.min(l1,l2);return (hi+0.05)/(lo+0.05);}
+  function judge(r,type){
+    if(type==='ui'||type==='large') return r>=4.5?'AAA':(r>=3?'AA':'NG');
+    return r>=7?'AAA':(r>=4.5?'AA':'NG');
+  }
+  function cssVar(el,name){return getComputedStyle(el).getPropertyValue(name).trim();}
+
+  function updateAllContrast(){
+    document.querySelectorAll('.ctab').forEach(tab=>{
+      const scope=document.getElementById(tab.dataset.themeScope);
+      tab.querySelectorAll('.row[data-fg]').forEach(row=>{
+        const fg=cssVar(scope,row.dataset.fg);
+        const bg=cssVar(scope,row.dataset.bg);
+        if(!fg||!bg) return;
+        const r=ratio(fg,bg), j=judge(r,row.dataset.type);
+        row.querySelector('.c-ratio').textContent=r.toFixed(2)+':1';
+        const b=row.querySelector('.badge'); b.textContent=j; b.className='badge '+j;
+      });
+    });
+  }
+
+  /* ===== トークン書き出し ===== */
+  const TOKENS={
+    'kurenai-momiji':{
+      dark:{ground:'#241317',surface:'#3a2126',primary:'#c3252b','primary-btn':'#c3252b','on-primary':'#ffffff',secondary:'#e9a300','secondary-ink':'#e9a300',accent:'#2e5d45','accent-ink':'#7fae8e',muted:'#c9a05e',text:'#f2e6d6','text-dim':'#b39a86'},
+      light:{ground:'#f7efe3',surface:'#fbf6ec',primary:'#b81f27','primary-btn':'#b81f27','on-primary':'#ffffff',secondary:'#e9a300','secondary-ink':'#9a6a00',accent:'#2e5d45','accent-ink':'#2e5d45',muted:'#b88a3e',text:'#3a1d22','text-dim':'#6e5a52'}
+    },
+    'kaede-momiji':{
+      dark:{ground:'#152019',surface:'#223029',primary:'#4e8a5e','primary-btn':'#427a52','on-primary':'#ffffff',secondary:'#e4bd3f','secondary-ink':'#e4bd3f',accent:'#bc2f33','accent-ink':'#e0686c',muted:'#a9854a',text:'#e8ebde','text-dim':'#93a08c'},
+      light:{ground:'#eef1e6',surface:'#f5f7ee',primary:'#3d7350','primary-btn':'#3d7350','on-primary':'#ffffff',secondary:'#e4bd3f','secondary-ink':'#8a6e00',accent:'#bc2f33','accent-ink':'#b32a2e',muted:'#9c7a43',text:'#1c2b22','text-dim':'#5a6a5c'}
+    }
+  };
+  const LABEL={'kurenai-momiji':'紅紅葉 / kurenai-momiji','kaede-momiji':'楓紅葉 / kaede-momiji'};
+
+  function tokenText(){
+    let out='';
+    for(const [theme,modes] of Object.entries(TOKENS)){
+      out+=`/* ${LABEL[theme]} ── 既定(墨地 / dark) */\n`;
+      out+=`[data-theme="${theme}"]{\n`;
+      for(const [k,v] of Object.entries(modes.dark)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n`;
+      out+=`/* ${LABEL[theme]} ── 練色 / light */\n`;
+      out+=`[data-theme="${theme}"][data-mode="light"]{\n`;
+      for(const [k,v] of Object.entries(modes.light)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n\n`;
+    }
+    return out.trimEnd();
+  }
+  function renderTokens(){
+    document.getElementById('tokenBlock').textContent=tokenText();
+  }
+  function copyTokens(){
+    const btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(tokenText()).then(()=>{
+      btn.textContent='コピーしました ✓';
+      setTimeout(()=>btn.textContent='コピー',1800);
+    }).catch(()=>{btn.textContent='コピー不可';setTimeout(()=>btn.textContent='コピー',1800);});
+  }
+
+  /* ===== 初期化 ===== */
+  updateAllContrast();
+  renderTokens();
+</script>
+</body>
+</html>
