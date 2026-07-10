@@ -13,10 +13,10 @@ help:
 	@grep -E -e '^[a-zA-Z_-]+:.*?## .*$$' -e '^## .* ##$$' $(MAKEFILE_LIST) \
 		| ./tools/help.awk | less -R
 
-.PHONY: clone
+.PHONY: command
 
 ## 分類コメント ##
-command:
+command: ## コマンドの説明
 	@echo "some command"
 
 ```
@@ -24,6 +24,11 @@ command:
 ## awk
 
 - ex: `./tools/help.awk`
+
+```
+touch ./tools/help.awk
+chmod +x ./tools/help.awk
+```
 
 ```shell
 #!/usr/bin/env -S awk -f
