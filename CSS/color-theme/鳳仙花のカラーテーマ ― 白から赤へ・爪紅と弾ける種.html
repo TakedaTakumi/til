@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ja" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鳳仙花のカラーテーマ ― 白から赤へ・爪紅と弾ける種</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ ページ共通(クローム) ============ */
+  html[data-mode="dark"]{
+    --page-bg:#1a1013; --page-ink:#efe0e4; --page-dim:#a8919a;
+    --hair:rgba(239,224,228,.14); --panel:#241619;
+  }
+  html[data-mode="light"]{
+    --page-bg:#ece0e2; --page-ink:#2c1a20; --page-dim:#6f5860;
+    --hair:rgba(44,26,32,.16); --panel:#f3e9eb;
+  }
+  :root{
+    --serif:"Shippori Mincho B1",serif;
+    --sans:"Zen Kaku Gothic New",sans-serif;
+  }
+
+  /* ============ ① 咲く花の色 ============ */
+  .theme.t1{
+    --color-ground:#2a1620; --color-surface:#3a2030;
+    --color-primary:#d0576b; --color-primary-btn:#c14a5e; --color-on-primary:#fff5f2;
+    --color-secondary:#e6899a; --color-secondary-ink:#e6899a;
+    --color-accent:#dca0b0;   --color-accent-ink:#dca0b0;
+    --color-muted:#a76a7a; --color-text:#f5e6ea; --color-text-dim:#c9a6b2;
+  }
+  html[data-mode="light"] .theme.t1{
+    --color-ground:#faeef1; --color-surface:#fdf6f8;
+    --color-primary:#c03a55; --color-primary-btn:#b8304c; --color-on-primary:#fff5f2;
+    --color-secondary:#dc6f86; --color-secondary-ink:#a83a56;
+    --color-accent:#c96b86;   --color-accent-ink:#9c4a68;
+    --color-muted:#a76a7a; --color-text:#3a1d28; --color-text-dim:#6e5058;
+  }
+
+  /* ============ ② 爪紅(つまくれなゐ) ============ */
+  .theme.t2{
+    --color-ground:#2a1014; --color-surface:#3d1820;
+    --color-primary:#e32c64; --color-primary-btn:#c8264f; --color-on-primary:#ffffff;
+    --color-secondary:#f0a5a0; --color-secondary-ink:#f0a5a0;
+    --color-accent:#9e3d3f;   --color-accent-ink:#d47076;
+    --color-muted:#a85560; --color-text:#f6e0e2; --color-text-dim:#cc9ea2;
+  }
+  html[data-mode="light"] .theme.t2{
+    --color-ground:#fbecee; --color-surface:#fef6f6;
+    --color-primary:#c01c50; --color-primary-btn:#b0184a; --color-on-primary:#ffffff;
+    --color-secondary:#e26a78; --color-secondary-ink:#b02f45;
+    --color-accent:#9e3d3f;   --color-accent-ink:#8a2e30;
+    --color-muted:#a85560; --color-text:#3d151b; --color-text-dim:#6e4248;
+  }
+
+  /* ============ ③ 開花〜結実の移ろい ============ */
+  .theme.t3{
+    --color-ground:#201826; --color-surface:#2e2234;
+    --color-primary:#d0576b; --color-primary-btn:#c14a5e; --color-on-primary:#fff5f2;
+    --color-secondary:#e6899a; --color-secondary-ink:#e6899a;
+    --color-accent:#769164;   --color-accent-ink:#9db98a;
+    --color-muted:#9a7788; --color-text:#efe6ea; --color-text-dim:#bfa9b4;
+  }
+  html[data-mode="light"] .theme.t3{
+    --color-ground:#f4eef2; --color-surface:#faf6f9;
+    --color-primary:#c03a55; --color-primary-btn:#b8304c; --color-on-primary:#fff5f2;
+    --color-secondary:#dc6f86; --color-secondary-ink:#a83a56;
+    --color-accent:#5e7a4e;   --color-accent-ink:#4a6a3c;
+    --color-muted:#9a7788; --color-text:#2a1f2a; --color-text-dim:#5f5058;
+  }
+
+  /* ============ ④ はじけた後 ============ */
+  .theme.t4{
+    --color-ground:#241210; --color-surface:#341c18;
+    --color-primary:#c2593f; --color-primary-btn:#b04a32; --color-on-primary:#fff3ee;
+    --color-secondary:#d98a6e; --color-secondary-ink:#d98a6e;
+    --color-accent:#6d2e24;   --color-accent-ink:#c07260;
+    --color-muted:#9c6450; --color-text:#f2e2d8; --color-text-dim:#c6a291;
+  }
+  html[data-mode="light"] .theme.t4{
+    --color-ground:#f7ede7; --color-surface:#fcf6f2;
+    --color-primary:#a8412a; --color-primary-btn:#9c3824; --color-on-primary:#fff3ee;
+    --color-secondary:#c8613f; --color-secondary-ink:#9a3f28;
+    --color-accent:#6d2e24;   --color-accent-ink:#6d2e24;
+    --color-muted:#9c6450; --color-text:#331a12; --color-text-dim:#68463a;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;min-height:100%;background:var(--page-bg);transition:background .5s ease}
+  /* ビューポート全体を覆う固定背景レイヤー(描画環境に依存せず確実に切替) */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--page-bg);transition:background .5s ease}
+  body{
+    background:var(--page-bg); color:var(--page-ink);
+    min-height:100vh; font-family:var(--sans); line-height:1.8;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    transition:background .5s ease,color .5s ease;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* ── トグル ── */
+  .topbar{position:sticky;top:0;z-index:50;background:var(--panel);background:color-mix(in srgb,var(--page-bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.14em}
+  .brand small{color:var(--page-dim);font-family:var(--sans);font-size:.66rem;letter-spacing:.3em;margin-left:10px}
+  .toggle{display:inline-flex;border:1px solid var(--hair);border-radius:999px;overflow:hidden;font-size:.78rem}
+  .toggle button{background:transparent;border:none;color:var(--page-dim);font-family:var(--sans);padding:8px 18px;cursor:pointer;letter-spacing:.1em;transition:background .2s,color .2s}
+  .toggle button[aria-pressed="true"]{background:var(--page-ink);color:var(--page-bg);font-weight:700}
+
+  /* ── ヘッダー ── */
+  header{padding:74px 0 48px}
+  .eyebrow{font-size:.74rem;letter-spacing:.42em;color:var(--page-dim);text-transform:uppercase;display:flex;align-items:center;gap:16px;margin-bottom:28px}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--hair)}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.4rem,6.5vw,4.6rem);line-height:1.14;letter-spacing:.03em}
+  .lead{margin-top:26px;max-width:40em;font-size:1.02rem;color:var(--page-dim)}
+  .lead b{color:var(--page-ink);font-weight:500}
+
+  /* ── 白→赤の帯 ── */
+  .spectrum{margin-top:34px;display:flex;height:14px;border-radius:999px;overflow:hidden;border:1px solid var(--hair)}
+  .spectrum span{flex:1}
+
+  /* ── テーマ縦並び ── */
+  .theme{padding:58px 0;border-top:1px solid var(--hair)}
+  .theme-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .theme-name{font-family:var(--serif);font-weight:700;font-size:2.3rem;letter-spacing:.05em}
+  .theme-yomi{font-size:.78rem;letter-spacing:.32em;color:var(--page-dim)}
+  .theme-tag{margin-top:6px;font-size:.92rem;color:var(--page-dim);display:flex;align-items:center;gap:10px}
+  .dot{width:7px;height:7px;border-radius:50%;flex:none}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;margin-top:30px;align-items:start}
+
+  /* ════════ 署名ビジュアル：弾ける莢と飛ぶ種 ════════ */
+  /* 熟した莢が触れると弾け、種を四方へ飛ばす(Impatiens=我慢できない)を表す */
+  .pods{display:flex;align-items:center;gap:26px;padding:20px 0 8px;flex-wrap:wrap}
+  .pod{
+    position:relative;width:80px;height:80px;flex:none;cursor:pointer;
+    opacity:0;animation:podin .7s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  /* 莢本体：紡錘形の実。5枚の弁が閉じている状態 */
+  .capsule{position:absolute;left:50%;top:50%;width:26px;height:46px;
+    transform:translate(-50%,-50%);
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    box-shadow:0 3px 9px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.10);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s;
+  }
+  /* 種(飛散する粒)。既定は莢の中心に潜む */
+  .seed{position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;
+    transform:translate(-50%,-50%);opacity:0;
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+    transition:transform .6s cubic-bezier(.2,.7,.3,1),opacity .5s;
+  }
+  /* ホバー/フォーカスで弾ける：莢がめくれ、種が四方へ */
+  .pod:hover .capsule,.pod:focus-visible .capsule{transform:translate(-50%,-50%) scale(.62) rotate(-14deg);opacity:.5}
+  .pod:hover .seed,.pod:focus-visible .seed{opacity:1}
+  .pod:hover .s1,.pod:focus-visible .s1{transform:translate(-320%,-260%)}
+  .pod:hover .s2,.pod:focus-visible .s2{transform:translate(220%,-300%)}
+  .pod:hover .s3,.pod:focus-visible .s3{transform:translate(-300%,180%)}
+  .pod:hover .s4,.pod:focus-visible .s4{transform:translate(300%,220%)}
+  .pod:hover .s5,.pod:focus-visible .s5{transform:translate(20%,-360%)}
+  .pod-label{position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);white-space:nowrap;
+    font-size:.66rem;letter-spacing:.14em;color:var(--page-dim)}
+  @keyframes podin{to{opacity:1}}
+  .caption{font-size:.84rem;color:var(--page-dim);margin-top:20px}
+
+  /* ── 色一覧 ── */
+  .swatches{margin-top:4px}
+  .sw{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--hair)}
+  .sw-chip{width:30px;height:30px;border-radius:7px;border:1px solid rgba(128,128,128,.25)}
+  .sw-name{font-family:var(--serif);font-size:1.02rem}
+  .sw-name span{font-family:var(--sans);font-size:.7rem;letter-spacing:.18em;color:var(--page-dim);margin-left:9px}
+  .sw-meta{text-align:right;font-size:.72rem;letter-spacing:.1em;color:var(--page-dim)}
+  .sw-meta .role{display:block;color:var(--page-ink);font-size:.76rem;letter-spacing:.14em}
+
+  .mini-h{margin-top:30px;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--page-dim);display:flex;align-items:center;gap:14px}
+  .mini-h:first-child{margin-top:0}
+  .mini-h::after{content:"";flex:1;height:1px;background:var(--hair)}
+
+  /* ── 適用プレビュー ── */
+  .mock{margin-top:18px;border-radius:16px;padding:24px;border:1px solid var(--hair);background:var(--color-ground);color:var(--color-text);transition:background .5s,color .5s}
+  .mock .m-eyebrow{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--color-secondary-ink)}
+  .mock .m-title{font-family:var(--serif);font-size:1.4rem;margin:8px 0 6px;font-weight:600}
+  .mock .m-body{font-size:.88rem;color:var(--color-text-dim);margin-bottom:18px}
+  .mock .m-row{display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+  .m-btn{border:none;border-radius:9px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.88rem;cursor:pointer;transition:transform .15s,filter .15s;background:var(--color-primary-btn);color:var(--color-on-primary)}
+  .m-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .m-btn.ghost{background:transparent;border:1.5px solid var(--color-secondary-ink);color:var(--color-secondary-ink);font-weight:500}
+  .m-pill{font-size:.72rem;padding:5px 12px;border-radius:999px;font-weight:700;letter-spacing:.06em;background:var(--color-accent);color:#fff}
+
+  /* ── コントラスト表 ── */
+  .ctab{margin-top:18px;border:1px solid var(--hair);border-radius:12px;overflow:hidden}
+  .ctab .row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:14px;padding:10px 16px;font-size:.84rem;border-bottom:1px solid var(--hair)}
+  .ctab .row:last-child{border-bottom:none}
+  .ctab .row.head{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--page-dim);background:var(--panel)}
+  .c-ratio{font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem}
+  .badge{font-size:.64rem;font-weight:700;letter-spacing:.08em;padding:3px 9px;border-radius:6px;min-width:42px;text-align:center}
+  .badge.AAA{background:#1f7a4d;color:#fff}
+  .badge.AA{background:#3a7ab5;color:#fff}
+  .badge.NG{background:#b23b3b;color:#fff}
+  .ctab .note-line{padding:9px 16px;font-size:.72rem;color:var(--page-dim);background:var(--panel)}
+
+  /* ── 典拠メモ ── */
+  .note{margin-top:26px;padding:20px 22px;border-radius:12px;background:var(--panel);border:1px solid var(--hair);font-size:.86rem;color:var(--page-dim);line-height:1.85;grid-column:1 / -1}
+  .note h4{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--page-ink);margin-bottom:10px;font-weight:700}
+  .note b{color:var(--page-ink);font-weight:500}
+  .note.caveat{border-left:3px solid #c79a3a}
+
+  /* ── 文化コラム ── */
+  .column{margin:52px 0 0;padding:30px 30px 32px;border-radius:14px;background:var(--panel);border:1px solid var(--hair)}
+  .column h3{font-family:var(--serif);font-size:1.3rem;font-weight:600;letter-spacing:.04em;margin-bottom:14px}
+  .column p{font-size:.9rem;color:var(--page-dim);line-height:1.9;max-width:52em}
+  .column p+p{margin-top:12px}
+  .column b{color:var(--page-ink);font-weight:500}
+
+  /* ── トークン ── */
+  .tokens{padding:58px 0 20px;border-top:1px solid var(--hair)}
+  .tokens-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+  .tokens h2{font-family:var(--serif);font-size:1.8rem;font-weight:700;letter-spacing:.04em}
+  .tokens p{color:var(--page-dim);font-size:.9rem;max-width:48em;margin-bottom:22px}
+  .tokens code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--panel);padding:1px 6px;border-radius:5px}
+  .copy-btn{background:var(--page-ink);color:var(--page-bg);border:none;border-radius:8px;padding:10px 20px;font-family:var(--sans);font-weight:700;font-size:.82rem;letter-spacing:.06em;cursor:pointer;transition:filter .2s}
+  .copy-btn:hover{filter:brightness(1.1)}
+  pre{background:var(--panel);border:1px solid var(--hair);border-radius:12px;padding:22px;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;line-height:1.7;color:var(--page-ink)}
+
+  footer{border-top:1px solid var(--hair);margin-top:36px;padding:42px 0 70px;font-size:.8rem;color:var(--page-dim);line-height:1.9}
+  footer b{color:var(--page-ink);font-weight:500}
+  footer .src{margin-top:12px;font-size:.74rem;opacity:.85}
+
+  @media(max-width:780px){
+    .grid{grid-template-columns:1fr;gap:30px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .pod{animation:none;opacity:1}
+    .capsule,.seed{transition:none}
+    /* 動きを止める代わり、種を静的に散らして「弾けた後」を示す */
+    .pod .capsule{transform:translate(-50%,-50%) scale(.62) rotate(-14deg);opacity:.5}
+    .pod .seed{opacity:1}
+    .pod .s1{transform:translate(-320%,-260%)}
+    .pod .s2{transform:translate(220%,-300%)}
+    .pod .s3{transform:translate(-300%,180%)}
+    .pod .s4{transform:translate(300%,220%)}
+    .pod .s5{transform:translate(20%,-360%)}
+    body,.mock{transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">鳳仙花<small>HOUSENKA ・ TSUMAKURENAI</small></div>
+    <div class="toggle" role="group" aria-label="表示モード切替">
+      <button id="btn-dark" aria-pressed="true" onclick="setMode('dark')">宵 Dark</button>
+      <button id="btn-light" aria-pressed="false" onclick="setMode('light')">昼 Light</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ツリフネソウ科 ・ 爪紅(つまくれなゐ)</div>
+    <h1>鳳仙花の<br>four themes</h1>
+    <p class="lead">
+      赤い花の汁で爪を染めて遊んだことから<b>爪紅(つまくれなゐ)</b>とも呼ばれる鳳仙花。
+      熟した実は<b>触れるだけで弾け</b>、種を四方へ飛ばします(属名 Impatiens は「我慢できない」の意)。
+      その<b>白から赤へ</b>移ろう花色を四つのカラーテーマに仕立てました。〈咲く花〉〈爪に移した染め〉〈開花から結実への移ろい〉〈はじけた後〉の順に、
+      <b>宵(ダーク)と昼(ライト)</b>を切り替えられ、主要な配色には<b>WCAGコントラスト比</b>を表示しています。
+    </p>
+    <div class="spectrum" aria-label="白から赤への色域">
+      <span style="background:#f3f0ee"></span>
+      <span style="background:#dca0b0"></span>
+      <span style="background:#d0576b"></span>
+      <span style="background:#e32c64"></span>
+      <span style="background:#c2593f"></span>
+      <span style="background:#6d2e24"></span>
+    </div>
+  </header>
+</div>
+
+<div class="wrap">
+
+  <!-- ───────── ① 咲く花の色 ───────── -->
+  <section class="theme t1" id="theme-t1">
+    <div class="theme-head"><span class="theme-name">咲く花の色</span><span class="theme-yomi">SAKU HANA ・ 白から紅へ</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#d0576b"></span>撫子・紅梅・今様 ― 夏に咲きそろう花の華やぎ</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">弾ける莢と飛ぶ種</div>
+        <div class="pods" aria-label="咲く花の色・弾ける莢(ホバー/フォーカスで弾けます)">
+          <div class="pod" tabindex="0" style="animation-delay:.05s">
+            <span class="capsule" style="background:#d0576b"></span>
+            <span class="seed s1" style="background:#7a3040"></span><span class="seed s2" style="background:#8a3848"></span>
+            <span class="seed s3" style="background:#7a3040"></span><span class="seed s4" style="background:#8a3848"></span>
+            <span class="seed s5" style="background:#6e2c3a"></span>
+            <span class="pod-label">紅梅</span>
+          </div>
+          <div class="pod" tabindex="0" style="animation-delay:.14s">
+            <span class="capsule" style="background:#e6899a"></span>
+            <span class="seed s1" style="background:#8a3848"></span><span class="seed s2" style="background:#7a3040"></span>
+            <span class="seed s3" style="background:#8a3848"></span><span class="seed s4" style="background:#7a3040"></span>
+            <span class="seed s5" style="background:#6e2c3a"></span>
+            <span class="pod-label">撫子</span>
+          </div>
+        </div>
+        <p class="caption">触れると弾ける莢。白・桃から紅へ、夏の花壇を彩る明るい花の色。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#d0576b"></span><span class="sw-name">今様色<span>いまよう</span></span><span class="sw-meta">#D0576B<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#e6899a"></span><span class="sw-name">紅梅色<span>こうばい</span></span><span class="sw-meta">#E6899A<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#dca0b0"></span><span class="sw-name">撫子色<span>なでしこ</span></span><span class="sw-meta">#DCA0B0<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#a76a7a"></span><span class="sw-name">蘇芳香<span>すおうこう</span></span><span class="sw-meta">#A76A7A<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">夏の庭から</div>
+          <div class="m-title">花の色をあつめる</div>
+          <p class="m-body">白から紅までひと株に咲きわける花の、その日の色を書きとめるノート。</p>
+          <div class="m-row"><button class="m-btn">書きはじめる</button><button class="m-btn ghost">下書き</button><span class="m-pill">見頃</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t1">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×今様)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>「鳳仙花色」という登録された伝統色は、主要な伝統色データベース・色名事典に確認できません。このテーマの各色は、<b>鳳仙花の実際の花色に、実在の日本の伝統色(今様色・紅梅色・撫子色など)を当てた現代の再構成</b>です。今様色は「当世流行の色」の意で平安に流行した紅系の色、紅梅色・撫子色も平安以来の色名ですが、これらが鳳仙花のために定められた色ではありません。各HEXは目安で、実際の花色は品種・個体で大きく異なります。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ② 爪紅 ───────── -->
+  <section class="theme t2" id="theme-t2">
+    <div class="theme-head"><span class="theme-name">爪紅</span><span class="theme-yomi">TSUMAKURENAI ・ 爪に移した染め</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#e32c64"></span>韓紅・退紅・蘇芳 ― 花を揉んで爪にうつす赤</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">弾ける莢と飛ぶ種</div>
+        <div class="pods" aria-label="爪紅・弾ける莢(ホバー/フォーカスで弾けます)">
+          <div class="pod" tabindex="0" style="animation-delay:.05s">
+            <span class="capsule" style="background:#e32c64"></span>
+            <span class="seed s1" style="background:#6e1828"></span><span class="seed s2" style="background:#801e30"></span>
+            <span class="seed s3" style="background:#6e1828"></span><span class="seed s4" style="background:#801e30"></span>
+            <span class="seed s5" style="background:#5e1422"></span>
+            <span class="pod-label">韓紅</span>
+          </div>
+          <div class="pod" tabindex="0" style="animation-delay:.14s">
+            <span class="capsule" style="background:#9e3d3f"></span>
+            <span class="seed s1" style="background:#5e1422"></span><span class="seed s2" style="background:#6e1828"></span>
+            <span class="seed s3" style="background:#5e1422"></span><span class="seed s4" style="background:#6e1828"></span>
+            <span class="seed s5" style="background:#4e1018"></span>
+            <span class="pod-label">蘇芳</span>
+          </div>
+        </div>
+        <p class="caption">花とカタバミの葉を揉み合わせ、爪にうつす。花より沈んだ、染め上がりの赤。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#e32c64"></span><span class="sw-name">韓紅<span>からくれなゐ</span></span><span class="sw-meta">#E32C64<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#f0a5a0"></span><span class="sw-name">退紅<span>あらぞめ</span></span><span class="sw-meta">#F0A5A0<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#9e3d3f"></span><span class="sw-name">蘇芳<span>すおう</span></span><span class="sw-meta">#9E3D3F<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#a85560"></span><span class="sw-name">蘇芳香<span>すおうこう</span></span><span class="sw-meta">#A85560<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">爪先の記</div>
+          <div class="m-title">初雪まで消えなければ</div>
+          <p class="m-body">花で染めた爪の色が、初雪まで残れば初恋がかなう。その色の移りを綴る日記。</p>
+          <div class="m-row"><button class="m-btn">染めを記す</button><button class="m-btn ghost">下書き</button><span class="m-pill">染め頃</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t2">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×韓紅)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>典拠と色の構成</h4>
+        <p>鳳仙花で爪を染める風習は、貝原益軒<b>『花譜』(1694)・『大和本草』(1708)</b>に記録があり、「女児が花とカタバミ(酢漿草)の葉を揉み合わせて爪を染め、紅色となる」とされます。ミョウバンを媒染に使うと発色がよくなります。ここでは染め上がりの赤を、実在の伝統色<b>韓紅(濃く鮮やかな紅)・退紅(淡く染めた紅)・蘇芳(赤みの暗い紫紅)</b>で構成しました。なお「爪紅」は植物の別名であると同時に、江戸期には紅を爪にさす化粧も指した両義の語です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ③ 開花〜結実の移ろい ───────── -->
+  <section class="theme t3" id="theme-t3">
+    <div class="theme-head"><span class="theme-name">移ろい</span><span class="theme-yomi">UTSUROI ・ 花から実へ</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#769164"></span>紅梅・今様・老竹 ― 咲いて実る一株の時間</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">弾ける莢と飛ぶ種</div>
+        <div class="pods" aria-label="移ろい・弾ける莢(ホバー/フォーカスで弾けます)">
+          <div class="pod" tabindex="0" style="animation-delay:.05s">
+            <span class="capsule" style="background:#d0576b"></span>
+            <span class="seed s1" style="background:#4a5a3c"></span><span class="seed s2" style="background:#56683e"></span>
+            <span class="seed s3" style="background:#4a5a3c"></span><span class="seed s4" style="background:#56683e"></span>
+            <span class="seed s5" style="background:#3e4e32"></span>
+            <span class="pod-label">花</span>
+          </div>
+          <div class="pod" tabindex="0" style="animation-delay:.14s">
+            <span class="capsule" style="background:#769164"></span>
+            <span class="seed s1" style="background:#3e4e32"></span><span class="seed s2" style="background:#4a5a3c"></span>
+            <span class="seed s3" style="background:#3e4e32"></span><span class="seed s4" style="background:#4a5a3c"></span>
+            <span class="seed s5" style="background:#344228"></span>
+            <span class="pod-label">実</span>
+          </div>
+        </div>
+        <p class="caption">紅の花が咲き、やがて緑の実が張る。熟した莢が弾けて、種が次の夏へ飛ぶ。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#d0576b"></span><span class="sw-name">今様色<span>いまよう</span></span><span class="sw-meta">#D0576B<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#e6899a"></span><span class="sw-name">紅梅色<span>こうばい</span></span><span class="sw-meta">#E6899A<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#769164"></span><span class="sw-name">老竹色<span>おいたけ</span></span><span class="sw-meta">#769164<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#9a7788"></span><span class="sw-name">滅紫<span>けしむらさき</span></span><span class="sw-meta">#9A7788<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">ひと株の記録</div>
+          <div class="m-title">咲いてから実るまで</div>
+          <p class="m-body">花が咲き、緑の実が張り、やがて弾けるまで。一株の夏を追う観察ノート。</p>
+          <div class="m-row"><button class="m-btn">観察する</button><button class="m-btn ghost">写真を見る</button><span class="m-pill">結実中</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t3">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×今様)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>このテーマは<b>咲いた花(紅)から結実(緑)への移ろい</b>を表すため、全体の白〜赤系のなかに<b>緑(老竹色)を一色だけ</b>差し色として加えています。老竹色・滅紫はいずれも実在の伝統色ですが、鳳仙花の色目として定められたものではなく、実の緑を表すために選んだ現代の対応です。各HEXは目安です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── ④ はじけた後 ───────── -->
+  <section class="theme t4" id="theme-t4">
+    <div class="theme-head"><span class="theme-name">はじけた後</span><span class="theme-yomi">HAJIKETA ATO ・ 種と褪せ莢</span></div>
+    <div class="theme-tag"><span class="dot" style="background:#c2593f"></span>栗皮茶・海老茶・緋 ― 飛び散った種と枯れゆく莢</div>
+
+    <div class="grid">
+      <div>
+        <div class="mini-h">弾ける莢と飛ぶ種</div>
+        <div class="pods" aria-label="はじけた後・弾ける莢(ホバー/フォーカスで弾けます)">
+          <div class="pod" tabindex="0" style="animation-delay:.05s">
+            <span class="capsule" style="background:#c2593f"></span>
+            <span class="seed s1" style="background:#3a1c14"></span><span class="seed s2" style="background:#4a2418"></span>
+            <span class="seed s3" style="background:#3a1c14"></span><span class="seed s4" style="background:#4a2418"></span>
+            <span class="seed s5" style="background:#2e1610"></span>
+            <span class="pod-label">莢</span>
+          </div>
+          <div class="pod" tabindex="0" style="animation-delay:.14s">
+            <span class="capsule" style="background:#9c6450"></span>
+            <span class="seed s1" style="background:#2e1610"></span><span class="seed s2" style="background:#3a1c14"></span>
+            <span class="seed s3" style="background:#2e1610"></span><span class="seed s4" style="background:#3a1c14"></span>
+            <span class="seed s5" style="background:#241009"></span>
+            <span class="pod-label">種</span>
+          </div>
+        </div>
+        <p class="caption">弾けて反り返った莢と、飛び散った濃い種。白から始まった旅の、赤い終着。</p>
+
+        <div class="swatches">
+          <div class="sw"><span class="sw-chip" style="background:#c2593f"></span><span class="sw-name">緋<span>ひ</span></span><span class="sw-meta">#C2593F<span class="role">強調 / Primary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#d98a6e"></span><span class="sw-name">洗朱<span>あらいしゅ</span></span><span class="sw-meta">#D98A6E<span class="role">副え / Secondary</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#6d2e24"></span><span class="sw-name">栗皮茶<span>くりかわ</span></span><span class="sw-meta">#6D2E24<span class="role">差し色 / Accent</span></span></div>
+          <div class="sw"><span class="sw-chip" style="background:#9c6450"></span><span class="sw-name">枯茶<span>からちゃ</span></span><span class="sw-meta">#9C6450<span class="role">中間 / Muted</span></span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mini-h">Web に適用すると</div>
+        <div class="mock">
+          <div class="m-eyebrow">秋のはじめ</div>
+          <div class="m-title">種を集めておく</div>
+          <p class="m-body">弾けて散った種を拾い、来年の夏のために名前をつけて残すアーカイブ。</p>
+          <div class="m-row"><button class="m-btn">種を保存</button><button class="m-btn ghost">一覧を見る</button><span class="m-pill">採種</span></div>
+        </div>
+
+        <div class="mini-h">コントラスト比 (WCAG)</div>
+        <div class="ctab" data-theme-scope="theme-t4">
+          <div class="row head"><span>組み合わせ</span><span>比</span><span>判定</span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-ground" data-type="text"><span>本文 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-text" data-bg="--color-surface" data-type="text"><span>本文 × 面</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-on-primary" data-bg="--color-primary-btn" data-type="ui"><span>主ボタン(文字×緋)</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-secondary-ink" data-bg="--color-ground" data-type="large"><span>副え見出し × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="row" data-fg="--color-accent-ink" data-bg="--color-ground" data-type="text"><span>差し色 × 地</span><span class="c-ratio"></span><span class="badge"></span></div>
+          <div class="note-line">基準 ― 本文:4.5 / 大きい文字:3.0 / UI部品:3.0。AAAは本文7.0以上。</div>
+        </div>
+      </div>
+
+      <div class="note caveat">
+        <h4>典拠についての注記</h4>
+        <p>種がはじけて飛ぶ性質(属名 Impatiens=我慢できない、英名 touch-me-not)は、この植物を選んだモチーフの核です。弾けた後の褪せた莢と濃い種を、実在の伝統色<b>緋(鮮やかな赤)・栗皮茶・枯茶(茶みの枯色)</b>で表しました。いずれも鳳仙花のために定められた色ではなく、「終わりの赤」を表す現代の対応です。各HEXは目安です。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 文化コラム ───────── -->
+  <div class="column">
+    <h3>東アジアの爪染め ― 一つの花をめぐる民俗</h3>
+    <p>鳳仙花で爪を染める風習は日本だけのものではありません。<b>中国</b>では南宋の周密『癸辛雑識』が、花にミョウバンを加えて爪を染める詳しい方法を記録しています。<b>朝鮮半島</b>の「봉숭아물들이기(ポンスンア物染め)」は、赤い色が魔除けになるという信仰と、初雪まで色が残れば恋がかなうという言い伝えを伴います。<b>沖縄</b>では鳳仙花を「てぃんさぐ」と呼び、民謡「てぃんさぐぬ花」に「てぃんさぐぬ花や 爪先に染みてぃ」と歌われ、爪を染めると悪霊除けになると信じられました。</p>
+    <p>一方で、しばしば言われる<b>「マニキュアの語源が鳳仙花・爪紅」という説は誤り</b>です。英語 manicure はラテン語 manus(手)+ cura(手入れ)に由来し、鳳仙花とは関係がありません。鳳仙花の爪染めは、それとは独立した東アジアの豊かな民俗です。俳句では「鳳仙花」は<b>初秋の季語</b>で、子季語に「爪紅」「染指草」が並びます。</p>
+  </div>
+
+</div>
+
+<!-- ───────── トークン書き出し ───────── -->
+<div class="wrap">
+  <section class="tokens">
+    <div class="tokens-head">
+      <h2>CSS 変数 (Design Tokens)</h2>
+      <button class="copy-btn" onclick="copyTokens()" id="copyBtn">コピー</button>
+    </div>
+    <p>そのまま開発に貼り付けられる形です。<code>[data-theme]</code> でテーマ(<code>saku-hana</code> / <code>tsumakurenai</code> / <code>utsuroi</code> / <code>hajiketa-ato</code>)を、<code>[data-mode="light"]</code> でライト版を切り替えます。Docker / devcontainer 上のフロントにもそのまま読み込めます。</p>
+    <pre id="tokenBlock"></pre>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <b>この見本について。</b>
+    「鳳仙花色」という登録された伝統色は主要な伝統色データベース・色名事典に確認できず、本テーマの各色は鳳仙花の実際の花色に実在の日本の伝統色を当てた現代の再構成です。
+    鳳仙花は東南アジア原産の外来種で、日本での名称記録は室町中期(1454年『撮壌集』)が最古級。したがって平安のかさね色目に「鳳仙花」の色目は存在しません。爪を染める風習の確実な記録は江戸期(貝原益軒『花譜』1694・『大和本草』1708)にあります。
+    <div class="src">色名と配色は、和色大辞典・伝統色のいろは等の伝統色を参照し、花色に対応づけたものです。花色は品種・個体で大きく変わり、各HEXはWeb表示・可読性のために調整した目安で、史料の実色や実際の花色と厳密には一致しません。コントラスト比は表示中のモードの実際の色から算出。ライト版の副え見出し・差し色は文字用に濃色(secondary-ink / accent-ink)を割り当て、彩りのチップには鮮やかな色をそのまま使っています。</div>
+  </footer>
+</div>
+
+<script>
+  function setMode(mode){
+    document.documentElement.dataset.mode=mode;
+    document.getElementById('btn-dark').setAttribute('aria-pressed',mode==='dark');
+    document.getElementById('btn-light').setAttribute('aria-pressed',mode==='light');
+    requestAnimationFrame(()=>{updateAllContrast();renderTokens();});
+  }
+  function hexToRgb(h){
+    h=h.trim().replace('#','');
+    if(h.length===3) h=h.split('').map(c=>c+c).join('');
+    return [0,2,4].map(i=>parseInt(h.substr(i,2),16));
+  }
+  function lum(h){
+    const [r,g,b]=hexToRgb(h).map(v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
+    return 0.2126*r+0.7152*g+0.0722*b;
+  }
+  function ratio(a,b){const l1=lum(a),l2=lum(b),hi=Math.max(l1,l2),lo=Math.min(l1,l2);return (hi+0.05)/(lo+0.05);}
+  function judge(r,type){
+    if(type==='ui'||type==='large') return r>=4.5?'AAA':(r>=3?'AA':'NG');
+    return r>=7?'AAA':(r>=4.5?'AA':'NG');
+  }
+  function cssVar(el,name){return getComputedStyle(el).getPropertyValue(name).trim();}
+  function updateAllContrast(){
+    document.querySelectorAll('.ctab').forEach(tab=>{
+      const scope=document.getElementById(tab.dataset.themeScope);
+      tab.querySelectorAll('.row[data-fg]').forEach(row=>{
+        const fg=cssVar(scope,row.dataset.fg), bg=cssVar(scope,row.dataset.bg);
+        if(!fg||!bg) return;
+        const r=ratio(fg,bg), j=judge(r,row.dataset.type);
+        row.querySelector('.c-ratio').textContent=r.toFixed(2)+':1';
+        const b=row.querySelector('.badge'); b.textContent=j; b.className='badge '+j;
+      });
+    });
+  }
+
+  const TOKENS={
+    'saku-hana':{
+      dark:{ground:'#2a1620',surface:'#3a2030',primary:'#d0576b','primary-btn':'#c14a5e','on-primary':'#fff5f2',secondary:'#e6899a','secondary-ink':'#e6899a',accent:'#dca0b0','accent-ink':'#dca0b0',muted:'#a76a7a',text:'#f5e6ea','text-dim':'#c9a6b2'},
+      light:{ground:'#faeef1',surface:'#fdf6f8',primary:'#c03a55','primary-btn':'#b8304c','on-primary':'#fff5f2',secondary:'#dc6f86','secondary-ink':'#a83a56',accent:'#c96b86','accent-ink':'#9c4a68',muted:'#a76a7a',text:'#3a1d28','text-dim':'#6e5058'}
+    },
+    'tsumakurenai':{
+      dark:{ground:'#2a1014',surface:'#3d1820',primary:'#e32c64','primary-btn':'#c8264f','on-primary':'#ffffff',secondary:'#f0a5a0','secondary-ink':'#f0a5a0',accent:'#9e3d3f','accent-ink':'#d47076',muted:'#a85560',text:'#f6e0e2','text-dim':'#cc9ea2'},
+      light:{ground:'#fbecee',surface:'#fef6f6',primary:'#c01c50','primary-btn':'#b0184a','on-primary':'#ffffff',secondary:'#e26a78','secondary-ink':'#b02f45',accent:'#9e3d3f','accent-ink':'#8a2e30',muted:'#a85560',text:'#3d151b','text-dim':'#6e4248'}
+    },
+    'utsuroi':{
+      dark:{ground:'#201826',surface:'#2e2234',primary:'#d0576b','primary-btn':'#c14a5e','on-primary':'#fff5f2',secondary:'#e6899a','secondary-ink':'#e6899a',accent:'#769164','accent-ink':'#9db98a',muted:'#9a7788',text:'#efe6ea','text-dim':'#bfa9b4'},
+      light:{ground:'#f4eef2',surface:'#faf6f9',primary:'#c03a55','primary-btn':'#b8304c','on-primary':'#fff5f2',secondary:'#dc6f86','secondary-ink':'#a83a56',accent:'#5e7a4e','accent-ink':'#4a6a3c',muted:'#9a7788',text:'#2a1f2a','text-dim':'#5f5058'}
+    },
+    'hajiketa-ato':{
+      dark:{ground:'#241210',surface:'#341c18',primary:'#c2593f','primary-btn':'#b04a32','on-primary':'#fff3ee',secondary:'#d98a6e','secondary-ink':'#d98a6e',accent:'#6d2e24','accent-ink':'#c07260',muted:'#9c6450',text:'#f2e2d8','text-dim':'#c6a291'},
+      light:{ground:'#f7ede7',surface:'#fcf6f2',primary:'#a8412a','primary-btn':'#9c3824','on-primary':'#fff3ee',secondary:'#c8613f','secondary-ink':'#9a3f28',accent:'#6d2e24','accent-ink':'#6d2e24',muted:'#9c6450',text:'#331a12','text-dim':'#68463a'}
+    }
+  };
+  const LABEL={'saku-hana':'咲く花の色 / saku-hana','tsumakurenai':'爪紅 / tsumakurenai','utsuroi':'移ろい / utsuroi','hajiketa-ato':'はじけた後 / hajiketa-ato'};
+  function tokenText(){
+    let out='';
+    for(const [theme,m] of Object.entries(TOKENS)){
+      out+=`/* ${LABEL[theme]} ── 既定(宵 / dark) */\n[data-theme="${theme}"]{\n`;
+      for(const [k,v] of Object.entries(m.dark)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n/* ${LABEL[theme]} ── 昼 / light */\n[data-theme="${theme}"][data-mode="light"]{\n`;
+      for(const [k,v] of Object.entries(m.light)) out+=`  --color-${k}: ${v};\n`;
+      out+=`}\n\n`;
+    }
+    return out.trimEnd();
+  }
+  function renderTokens(){document.getElementById('tokenBlock').textContent=tokenText();}
+  function copyTokens(){
+    const btn=document.getElementById('copyBtn');
+    navigator.clipboard.writeText(tokenText()).then(()=>{
+      btn.textContent='コピーしました ✓';setTimeout(()=>btn.textContent='コピー',1800);
+    }).catch(()=>{btn.textContent='コピー不可';setTimeout(()=>btn.textContent='コピー',1800);});
+  }
+  updateAllContrast();
+  renderTokens();
+</script>
+</body>
+</html>
