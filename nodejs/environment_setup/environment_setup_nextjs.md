@@ -1,7 +1,7 @@
 # 新規プロジェクト 環境構築ガイド
 
 > このファイルは、**新しいプロジェクトを開始するときに AI エージェントへ渡す資料**です。
-> `diary-task`(日次タスク管理 PoC)で確立した「Docker + devcontainer + Claude Code サンドボックス」環境を、
+> `diary-task`(日次タスク管理 PoC)で確立した「Docker + devcontainer」環境を、
 > ほぼそのまま再現しつつ、各ツールのバージョンだけを最新安定版へ更新することを目的とします。
 
 ---
@@ -29,10 +29,9 @@
 └── Docker Compose
     └── app サービス(node:XX-bookworm-slim ベース)
         ├── 第1部: 環境インフラ層(framework 非依存・再利用)
-        │   ├── Dockerfile        … corepack 焼き込み / Claude Code / bubblewrap
-        │   ├── docker-compose.yml … bind mount / named volume / seccomp
+        │   ├── Dockerfile        … corepack 焼き込み
+        │   ├── docker-compose.yml … bind mount / named volume
         │   ├── devcontainer.json  … VSCode 接続 / 拡張 / features
-        │   ├── .claude/settings.json … サンドボックス & 権限
         │   └── CI / Dependabot / audit / pnpm-workspace(サプライチェーン)
         └── 第2部: アプリスタック層(差し替え可能)
             └── Next.js / React / Tailwind / Biome / Vitest …
@@ -61,8 +60,6 @@
 |-----------|------|
 | `git`, `curl`, `ca-certificates` | 基本ツール |
 | `procps` | プロセス確認(`ps` 等) |
-| **`bubblewrap`** | **Claude Code のサンドボックス(Bash 隔離)に必須。** FS/プロセス隔離を担う。無いと Bash 実行が全滅。 |
-| **`socat`** | **同上。** サンドボックスのネットワークリレー。 |
 
 ## 2.2 `docker/Dockerfile`
 
@@ -78,22 +75,12 @@ ARG APP_USER=node
 # corepack の対話プロンプトを抑止(tty: true 環境で起動時にハングするのを防ぐ)
 ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
-# corepack のキャッシュ/ダウンロード先を allowWrite 対象配下に固定する。
-# 既定の ~/.cache/node/corepack は sandbox の allowWrite に含まれず、
-# corepack の書込が EROFS で失敗して pnpm が全滅するため。
-# ~/.local/share/pnpm/** は .claude/settings.json の allowWrite 対象なので書込可能。
-ENV COREPACK_HOME=/home/${APP_USER}/.local/share/pnpm/corepack
-
 # 基本パッケージ
-# bubblewrap / socat は Claude Code の sandbox(bash 隔離)に必須。
-# bubblewrap: ファイルシステム/プロセス隔離、socat: ネットワークリレー。
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     ca-certificates \
     procps \
-    bubblewrap \
-    socat \
     && rm -rf /var/lib/apt/lists/*
 
 # corepack を有効化(/usr/local/bin/ に pnpm シンボリックリンクを作るので root で実行)
@@ -112,21 +99,13 @@ RUN mkdir -p /<PROJECT>/node_modules /home/${APP_USER}/.local/share/pnpm/store \
 # APP_USER に切り替え(以降はこのユーザーで実行)
 USER ${APP_USER}
 
-# Claude Code をグローバルインストール(APP_USER 権限)
-RUN npm config set prefix "/home/${APP_USER}/.npm-global"
-ENV PATH=/home/${APP_USER}/.npm-global/bin:$PATH
-RUN npm install -g @anthropic-ai/claude-code
-
 WORKDIR /<PROJECT>
 
 # package.json の packageManager 由来で pnpm をイメージにキャッシュ(焼き込み)する。
-# sandbox 下では registry 到達不可で corepack が pnpm を DL できず `pnpm install` が
-# 起動前に失敗する。ビルドは sandbox 外=registry 到達可なのでここで焼いておけば
-# 実行時(sandbox 下)は DL 不要。
+# 実行時の corepack による pnpm ダウンロードを不要にし、起動を速く・
+# ネットワーク非依存にするため。
 # `corepack install`(バージョン無指定)は package.json の packageManager を唯一のソースとして
 # 参照するため「corepack prepare で二重管理しない」制約と両立する。
-# COREPACK_HOME(~/.local/share/pnpm/corepack)は named volume 対象外(store のみ volume)
-# なので、焼いたキャッシュは実行時もイメージ層として残る。
 COPY --chown=${APP_USER}:${APP_USER} package.json ./
 RUN corepack install
 ```
@@ -134,7 +113,7 @@ RUN corepack install
 **重要な設計ポイント(消さない理由):**
 
 - **pnpm のバージョンは `package.json` の `packageManager` フィールドが唯一のソース。** Dockerfile に `corepack prepare pnpm@X` を書いて二重管理しない。
-- **`corepack install` で pnpm をイメージに焼き込む。** サンドボックス実行時は registry に届かないため、ビルド時(=サンドボックス外)にキャッシュしておくのが肝。
+- **`corepack install` で pnpm をイメージに焼き込む。** 実行時のダウンロードを不要にし、起動を速く・ネットワーク非依存にする。
 - **named volume のマウント先を先に `mkdir` + `chown`。** 怠ると root 所有で初期化され、`node` ユーザーから書けなくなる。
 
 ## 2.3 `docker-compose.yml`
@@ -160,24 +139,8 @@ services:
       - app-node-modules:/<PROJECT>/node_modules
       # pnpm のグローバルストア(キャッシュ)
       - app-pnpm-store:/home/node/.local/share/pnpm/store
-      # Claude の設定・認証・履歴はホストと共有
-      # $HOME が未定義だとマウント先が不定になるため、明示的にエラーにする
-      - ${HOME:?HOME環境変数が未定義です。ホストの$HOMEが設定されている必要があります}/.claude:/home/node/.claude
       - ~/.ssh:/home/node/.ssh:ro
       - ~/.gitconfig:/home/node/.gitconfig:ro
-    environment:
-      # NODE_ENV はコマンド側(next dev / next build)が自動で設定するため
-      # ここで強制すると `pnpm build` 時に dev 値が残って prerender が壊れるので設定しない
-      CLAUDE_CONFIG_DIR: /home/node/.claude
-    # VSCode devcontainer から attach するときに強制停止されないようにする
-    security_opt:
-      # Claude Code のサンドボックス (bubblewrap) が unprivileged user namespace の
-      # 作成を必要とするため、seccomp フィルタを無効化する。
-      # 外すと Claude Code の Bash 実行が全滅する（bwrap が namespace を作れない）。
-      # NOTE: seccomp 完全無効化は攻撃面を広げるため、この compose は開発専用。
-      #       本番運用する場合は override ファイルでこの設定を打ち消すこと
-      #       (主隔離境界はコンテナであり、本設定は多層防御の一層を緩めるもの)。
-      - seccomp=unconfined
     stdin_open: true
     tty: true
 
@@ -189,9 +152,6 @@ volumes:
 **落とし穴(必ず守る):**
 
 1. **`environment:` に `NODE_ENV` を書かない。** dev 値が残ると Static Export の prerender が `<Html> should not be imported` で落ちる。`next dev`/`next build` がコマンド側で適切に設定する。
-2. **`seccomp=unconfined` は Claude Code サンドボックス(bubblewrap の user namespace)に必須。** ただし攻撃面を広げるため **この compose は開発専用**。本番では override で打ち消す。
-3. **`${HOME:?...}` 構文で HOME 未定義を即エラーにする。** マウント先が不定になる事故を防ぐ。
-4. **`~/.claude` はホスト bind mount。** 認証・履歴がコンテナ再ビルドでも残る。初回は `mkdir -p ~/.claude` が必要(root 所有での自動作成を回避)。
 
 ## 2.4 `.devcontainer/devcontainer.json`
 
@@ -239,7 +199,6 @@ volumes:
         "files.autoSave": "afterDelay",
         "editor.defaultFormatter": "biomejs.biome",
         "editor.formatOnSave": true,
-        "claudeCode.allowDangerouslySkipPermissions": true,
         "accessibility.signals.terminalBell": { "sound": "on" }
       }
     }
@@ -251,77 +210,7 @@ volumes:
 - **拡張機能**: `biomejs.biome` / `bradlc.vscode-tailwindcss` / `vitest.explorer` はアプリ層に応じて取捨選択してよい。`anthropic.claude-code` は必須。
 - **features は SHA(digest)pin が望ましい**(§4.4 参照)。`devcontainer-lock.json` が自動生成される。
 
-## 2.5 Claude Code サンドボックス設定 `.claude/settings.json`
-
-> このファイルは **コミット対象**。サンドボックスと権限の deny/ask ルールを定義する。変更時は影響に注意。
-
-```jsonc
-{
-  "allowManagedPermissionRulesOnly": true,
-  "permissions": {
-    "allow": ["Read", "Grep", "Glob"],
-    "deny": [
-      "Bash(rm -rf ~/*)",
-      "Bash(curl*)",
-      "Bash(wget *)",
-      "Bash(git push *)",
-      "Bash(chmod 777 *)",
-      "Bash(sudo *)",
-      "Read(**/.env)",
-      "Read(**/.env.*)",
-      "Read(**/.envrc)",
-      "Read(**/.secrets/**)",
-      "Read(**/.credentials.json)",
-      "Read(**.*.pem)",
-      "Read(**.*.key)"
-    ],
-    "ask": [
-      "Bash(gh api -X POST *)",
-      "Bash(gh api --method POST *)",
-      "Bash(gh pr comment *)",
-      "Bash(gh pr review *)",
-      "Bash(gh issue comment *)"
-    ]
-  },
-  "sandbox": {
-    "enabled": true,
-    "enableWeakerNestedSandbox": true,
-    "allowUnsandboxedCommands": false,
-    "filesystem": {
-      "denyRead": [
-        "~/.ssh/**",
-        "~/.aws/**",
-        "~/.claude/**",
-        "**/.env",
-        "**/.env.*",
-        "**/.envrc",
-        "**/.secrets/**",
-        "**/.credentials.json",
-        "**/*.pem",
-        "**/*.key"
-      ],
-      "allowWrite": [
-        "/tmp/**",
-        "./**",
-        "~/.local/share/pnpm/**"
-      ]
-    },
-    "allowedDomains": [
-      "registry.npmjs.org",
-      "github.com",
-      "*.githubusercontent.com"
-    ]
-  }
-}
-```
-
-**ポイント:**
-
-- **`allowWrite` に `~/.local/share/pnpm/**` が含まれる** → Dockerfile の `COREPACK_HOME` をここに置く理由(§2.2)と対応。
-- **`allowedDomains`** は pnpm install と GitHub 操作に必要な最小ドメイン。アプリ層で追加の registry/CDN が必要なら足す。
-- **`denyRead` / `deny`** は秘密情報の読み出しと破壊的操作をブロック。プロジェクト固有の秘密ファイルパターンがあれば追記する。
-
-## 2.6 サプライチェーン対策 & CI
+## 2.5 サプライチェーン対策 & CI
 
 ### `pnpm-workspace.yaml`
 
@@ -445,7 +334,7 @@ updates:
     labels: [dependencies, docker]
 ```
 
-## 2.7 Lint / Format / Test ツール(framework 非依存の方針)
+## 2.6 Lint / Format / Test ツール(framework 非依存の方針)
 
 - **Biome**(ESLint/Prettier 不使用)。`pnpm check` / `check:fix` / `check:ci`(`--error-on-warnings`)。
   - 規約: indent 2 / lineWidth 100 / double quotes / trailing commas all / semicolons always。
@@ -628,7 +517,6 @@ export default defineConfig({
 - [ ] `vitest.config.ts` の `environment`(Node 系なら `node`、`jsdom` 不要)
 - [ ] `biome.json` の `files.includes`
 - [ ] CI の `Build` ステップ(Static Export 以外なら変更)
-- [ ] `.claude/settings.json` の `allowedDomains`(追加 registry/CDN)
 - [ ] ポート番号(`docker-compose.yml` の `ports` と dev サーバー)
 
 ---
@@ -660,7 +548,7 @@ npm view typescript version
 - **開発コンテナ(Dockerfile の `FROM`)**: 最新の安定系を使ってよい(diary-task は Current 系)。
 - **CI / 実行ターゲット**: **Active LTS** を推奨。
 - LTS の確認: `https://nodejs.org/en/about/previous-releases`(スケジュール)/ `https://nodejs.org/dist/index.json`(全リリース)。
-- 開発と CI で Node メジャーを揃えるか分けるかは、プロジェクトの実行ターゲットに合わせて決める(§2.6 の注記)。
+- 開発と CI で Node メジャーを揃えるか分けるかは、プロジェクトの実行ターゲットに合わせて決める(§2.5 の注記)。
 - **Node 25 以降は corepack が本体同梱でない** → Dockerfile で `npm install -g corepack@<VER>` が必要(§2.2)。
 
 ### 4.3 corepack のバージョン
@@ -741,17 +629,15 @@ docker buildx imagetools inspect ghcr.io/devcontainers/features/github-cli:1
    - [ ] `docker/Dockerfile`
    - [ ] `docker-compose.yml`
    - [ ] `.devcontainer/devcontainer.json`
-   - [ ] `.claude/settings.json`
    - [ ] `pnpm-workspace.yaml`
    - [ ] `.github/workflows/ci.yml`、`.github/workflows/audit.yml`、`.github/dependabot.yml`
 4. [ ] **第2部のファイルを配置 or 差し替え**(アプリ層): `package.json` / `next.config.ts` / `tsconfig.json` / `postcss.config.mjs` / `vitest.config.ts` / `vitest.setup.ts` / `biome.json`
 5. [ ] GitHub Actions を SHA pin に更新(§4.4)。
-6. [ ] ホストで初回準備: `mkdir -p ~/.claude`(root 所有での自動作成を回避)。
-7. [ ] 初回ビルド&起動: `docker compose up -d --build` → `http://localhost:3000` を確認。
+6. [ ] 初回ビルド&起動: `docker compose up -d --build` → `http://localhost:3000` を確認。
    - VSCode 派は `Dev Containers: Reopen in Container` →(必要なら)`pnpm dev`。
-8. [ ] 動作確認: `docker compose run --rm app pnpm check:ci` / `pnpm type-check` / `pnpm test` / `pnpm build` が通る。
-9. [ ] `README.md` と `CLAUDE.md` をプロジェクトに合わせて作成(本ガイドの内容を要約)。
-10. [ ] **PR は必ず Draft で作成**(運用ルール)。新規ブランチに upstream は設定しない。
+7. [ ] 動作確認: `docker compose run --rm app pnpm check:ci` / `pnpm type-check` / `pnpm test` / `pnpm build` が通る。
+8. [ ] `README.md` と `CLAUDE.md` をプロジェクトに合わせて作成(本ガイドの内容を要約)。
+9. [ ] **PR は必ず Draft で作成**(運用ルール)。新規ブランチに upstream は設定しない。
 
 ---
 
@@ -760,16 +646,11 @@ docker buildx imagetools inspect ghcr.io/devcontainers/features/github-cli:1
 | # | 症状 | 原因 / 対処 |
 |---|------|------------|
 | 1 | `pnpm build` で `<Html> should not be imported` | `docker-compose.yml` の `environment:` に `NODE_ENV` を設定している。**削除**する。 |
-| 2 | コンテナ内で Claude Code の Bash が全滅 | `seccomp=unconfined` が無い / `bubblewrap`・`socat` 未インストール。§2.2/§2.3 を確認。 |
-| 3 | `pnpm install` がサンドボックス下で失敗 | corepack が registry に届かず pnpm を DL できない。**Dockerfile の `corepack install` で焼き込み**(§2.2)。 |
-| 4 | corepack の書込が EROFS で失敗 | `COREPACK_HOME` が allowWrite 外。`~/.local/share/pnpm/corepack` に固定(§2.2)。 |
-| 5 | bind mount したソースが root 所有で書けない | ホスト/コンテナの UID 不一致。ホスト側は `sudo chown -R "$(id -u):$(id -g)" .`、コンテナ内は `docker compose exec -u root app chown -R node:node /<PROJECT>`(Docker の権限で root exec)。 |
-| 6 | `${HOME:?...}` でエラー | ホストの `HOME` 未定義。`echo $HOME` で確認し設定する。 |
-| 7 | `~/.claude` が root 所有でマウント不可 | `sudo chown -R "$(id -u):$(id -g)" ~/.claude`。初回は事前 `mkdir -p ~/.claude`。 |
-| 8 | named volume が root 所有で初期化され書けない | Dockerfile で `mkdir` + `chown` を先に行う(§2.2)。 |
-| 9 | corepack 起動時にハング | `COREPACK_ENABLE_DOWNLOAD_PROMPT=0` を消さない(`tty: true` 環境)。 |
-| 10 | ベースイメージが落とせない | `FROM` を一時的に `node:<NODE_MAJOR>-slim` や `node:lts-bookworm-slim` に置換して再ビルド。 |
-| 11 | pnpm のバージョンを変えたい | Dockerfile ではなく **`package.json` の `packageManager`** を書き換えて再ビルド(唯一のソース)。 |
+| 2 | bind mount したソースが root 所有で書けない | ホスト/コンテナの UID 不一致。ホスト側は `sudo chown -R "$(id -u):$(id -g)" .`、コンテナ内は `docker compose exec -u root app chown -R node:node /<PROJECT>`(Docker の権限で root exec)。 |
+| 3 | named volume が root 所有で初期化され書けない | Dockerfile で `mkdir` + `chown` を先に行う(§2.2)。 |
+| 4 | corepack 起動時にハング | `COREPACK_ENABLE_DOWNLOAD_PROMPT=0` を消さない(`tty: true` 環境)。 |
+| 5 | ベースイメージが落とせない | `FROM` を一時的に `node:<NODE_MAJOR>-slim` や `node:lts-bookworm-slim` に置換して再ビルド。 |
+| 6 | pnpm のバージョンを変えたい | Dockerfile ではなく **`package.json` の `packageManager`** を書き換えて再ビルド(唯一のソース)。 |
 
 ---
 
