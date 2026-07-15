@@ -74,7 +74,6 @@
 | パッケージ | 理由 |
 |-----------|------|
 | `git`, `curl`, `ca-certificates` | 基本ツール |
-| `sudo` | コンテナ内での権限調整(NOPASSWD) |
 | `procps` | プロセス確認(`ps` 等) |
 | **`bubblewrap`** | **Claude Code のサンドボックス(Bash 隔離)に必須。** FS/プロセス隔離を担う。無いと Bash 実行が全滅。 |
 | **`socat`** | **同上。** サンドボックスのネットワークリレー。 |
@@ -106,14 +105,10 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     ca-certificates \
-    sudo \
     procps \
     bubblewrap \
     socat \
     && rm -rf /var/lib/apt/lists/*
-
-# APP_USER に sudo 権限を付与(権限調整用、NOPASSWD)
-RUN echo "${APP_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # corepack を有効化(/usr/local/bin/ に pnpm シンボリックリンクを作るので root で実行)
 # pnpm の具体的なバージョンは package.json の `packageManager` フィールドが唯一のソース。
@@ -769,7 +764,7 @@ docker buildx imagetools inspect ghcr.io/devcontainers/features/github-cli:1
 | 2 | コンテナ内で Claude Code の Bash が全滅 | `seccomp=unconfined` が無い / `bubblewrap`・`socat` 未インストール。§2.2/§2.3 を確認。 |
 | 3 | `pnpm install` がサンドボックス下で失敗 | corepack が registry に届かず pnpm を DL できない。**Dockerfile の `corepack install` で焼き込み**(§2.2)。 |
 | 4 | corepack の書込が EROFS で失敗 | `COREPACK_HOME` が allowWrite 外。`~/.local/share/pnpm/corepack` に固定(§2.2)。 |
-| 5 | bind mount したソースが root 所有で書けない | ホスト/コンテナの UID 不一致。`sudo chown -R "$(id -u):$(id -g)" .` または `docker compose exec app sudo chown -R node:node /<PROJECT>`。 |
+| 5 | bind mount したソースが root 所有で書けない | ホスト/コンテナの UID 不一致。ホスト側は `sudo chown -R "$(id -u):$(id -g)" .`、コンテナ内は `docker compose exec -u root app chown -R node:node /<PROJECT>`(Docker の権限で root exec)。 |
 | 6 | `${HOME:?...}` でエラー | ホストの `HOME` 未定義。`echo $HOME` で確認し設定する。 |
 | 7 | `~/.claude` が root 所有でマウント不可 | `sudo chown -R "$(id -u):$(id -g)" ~/.claude`。初回は事前 `mkdir -p ~/.claude`。 |
 | 8 | named volume が root 所有で初期化され書けない | Dockerfile で `mkdir` + `chown` を先に行う(§2.2)。 |
