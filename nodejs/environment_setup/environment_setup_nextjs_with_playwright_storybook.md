@@ -154,7 +154,7 @@ RUN corepack install
 - **pnpm のバージョンは `package.json` の `packageManager` フィールドが唯一のソース。** Dockerfile に `corepack prepare pnpm@X` を書いて二重管理しない。
 - **`corepack install` で pnpm をイメージに焼き込む。** 実行時のダウンロードを不要にし、起動を速く・ネットワーク非依存にする。
 - **named volume のマウント先を先に `mkdir` + `chown`。** 怠ると root 所有で初期化され、`node` ユーザーから書けなくなる。
-- **`playwright install-deps` は `npx -y playwright@<PLAYWRIGHT_VER>` で呼ぶ。** この時点ではまだ `pnpm install` していないので `pnpm exec` は使えない。バージョンは `package.json` の `@playwright/test` と手で揃える必要がある(§7 の落とし穴を参照)。
+- **`playwright install-deps` は `npx -y playwright@<PLAYWRIGHT_VER>` で呼ぶ。** この時点ではまだ `pnpm install` していないので `pnpm exec` は使えない。バージョンは `package.json` の `@playwright/test` と手で揃える必要がある(§5.6。症状は §7 の落とし穴 #15)。
 - **OS ライブラリはイメージ側で済ませ、ブラウザバイナリは実行時に取る。** ブラウザバイナリ(`~/.cache/ms-playwright`)はイメージに焼かない方針にしてあるため、コンテナ内では初回に一度だけ次を実行する。
 
   ```bash
@@ -183,8 +183,6 @@ services:
       # 開発サーバーと違い自動起動はせず、必要なときにコンテナ内で手動起動する。
       # Storybook dev サーバーは無認証のため、ホスト外(LAN)へは公開しない。ループバック限定。
       - "127.0.0.1:6006:6006"
-    # NODE_ENV は environment: に書かない。コマンド側(next dev / next build)が自動で
-    # 設定するため、ここで強制すると `pnpm build` 時に dev 値が残って prerender が壊れる。
     volumes:
       # ソース全体を bind(ホスト編集を即反映)
       - .:/<PROJECT>
@@ -478,17 +476,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "version=$(node -p "require('./package.json').devDependencies['@playwright/test']")" >> "$GITHUB_OUTPUT"
-
+      # ブラウザバイナリは pnpm のキャッシュには含まれない(node_modules の外に置かれる)ため、
+      # 別途キャッシュする。playwright のバージョンは lockfile にのみ現れるので、その
+      # ハッシュをキーにする。lockfile が変わればキャッシュは捨てられるが、次のステップの
+      # playwright install が再取得するので不整合にはならない。
       - name: Cache Playwright browsers
         uses: actions/cache@<SHA> # v6.x
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Install Playwright browsers
+      # キャッシュヒット時もこのステップは実行する。バイナリのダウンロードは playwright 側で
+      # スキップされる一方、OS のライブラリ(--with-deps)はキャッシュ対象外で毎回必要なため。
+      - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
 
       - name: E2E test
@@ -546,7 +546,11 @@ jobs:
         run: pnpm test:storybook
 ```
 
-**2 つの `Cache Playwright browsers` でキーの作り方が違う点に注意。** `e2e` 側は `package.json` から読んだ `@playwright/test` の宣言値、`storybook-test` 側は `pnpm-lock.yaml` のハッシュをキーにしている。どちらでも動くが、**lockfile ハッシュのほうが「実際に入るバージョン」に忠実**(レンジ指定でも解決結果の変化を検知できる)である一方、無関係な依存更新でもキャッシュが捨てられる。新規プロジェクトでは**どちらか一方に統一する**のが望ましい。
+**`Cache Playwright browsers` のキーは、2 つのジョブとも `pnpm-lock.yaml` のハッシュに統一している。** ブラウザバイナリは pnpm のキャッシュに含まれない(`node_modules` の外に置かれる)ため別途キャッシュするが、そのキーを何に紐づけるかには `package.json` の `@playwright/test` の宣言値を読む選択肢もある。**lockfile ハッシュのほうが「実際に入るバージョン」に忠実**で、レンジ指定でも解決結果の変化を検知できるのに対し、宣言値をキーにするとレンジ指定のときに解決結果の変化を取りこぼす。
+
+トレードオフは**キャッシュのヒット率**である。lockfile ハッシュは Playwright と無関係な依存更新でもキャッシュを捨てるので、宣言値をキーにするより無駄なダウンロードが増える。ただしキャッシュが捨てられても次のステップの `playwright install` が再取得するため、**不整合にはならない**(遅くなるだけで壊れない)。取りこぼしは壊れるが、ヒット率の低下は壊れない — この非対称性から lockfile ハッシュを既定にしている。
+
+なお、**キャッシュヒット時もブラウザ導入のステップ(`playwright install`)は `--with-deps` 付きで実行する**。バイナリのダウンロードは Playwright 側でスキップされる一方、OS のライブラリはキャッシュ対象外(`~/.cache/ms-playwright` の外)で毎回必要なためである。
 
 > **CI と開発コンテナで Node メジャーが異なってよい。**
 > 開発コンテナは Current 系、CI は Active LTS を使うのが既定の方針。アプリの実行ターゲットに合わせるなら CI は LTS が無難。両者を揃えたい場合は §5.2 の方針で統一する。
@@ -572,7 +576,9 @@ jobs:
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    // `start`(next start)は置かない。output: "export" では next start が本来のサーバー
+    // 機能を持たないため(§4.4.3)。ローカルで出力を配信するなら serve:out を使う。
+    // 本番配信は静的ホスティング側の責務。
     "biome": "biome",
     "check": "biome check",
     "check:ci": "biome check --error-on-warnings",
@@ -813,7 +819,7 @@ Tailwind v4 は **CSS-first 構成**であり、`tailwind.config.js` ではな�
 
 ### 別 framework に差し替える際に触る箇所(チェックリスト)
 
-- [ ] `package.json` の `dependencies` / `scripts`(`dev` / `build` / `start` / `serve:out`)
+- [ ] `package.json` の `dependencies` / `scripts`(`dev` / `build` / `serve:out`。Static Export をやめるなら `start` を足す判断も含む)
 - [ ] `next.config.ts` / `postcss.config.mjs` / Tailwind(フロントでなければ不要)
 - [ ] `tsconfig.json` の `jsx` / `plugins`(Next 非依存なら削除)
 - [ ] `vitest.config.ts` の `environment`(Node 系なら `node`、`jsdom` 不要)
@@ -965,19 +971,22 @@ afterEach(() => {
 ### 4.3.1 導入手順
 
 ```bash
-# コンテナ内で実行する(ホストには何も入れない)
+# コンテナ内で実行する(ホストには何も入れない)。
+# ホストのシェルからは `docker compose exec app`(起動済み)か
+# `docker compose run --rm app`(単発)を前置する(§1.2 のモード B / C)。
 pnpm dlx storybook@latest init
 ```
 
 スキャフォールドが `.storybook/main.ts` / `.storybook/preview.ts` と、サンプル Story 一式を生成する。そのあと次を手で整える。
 
-1. `.storybook/preview.ts` を **`.storybook/preview.tsx` に改名**する(デコレータや JSX を書けるようにするため)。
-2. `.storybook/main.ts` の `stories` グロブを `../src` 配下に限定する(§4.3.2)。
-3. スキャフォールドが生成したサンプル Story(`src/stories/` 等)を削除する。**Story は対象コンポーネントと同じディレクトリに置く**規約にするため(§4.3.5)。
-4. `@storybook/addon-a11y` / `@storybook/addon-docs` / `@storybook/addon-vitest` を導入し、`main.ts` の `addons` に並べる。
-5. `tsconfig.json` の `include` に `.storybook/**/*.ts` / `.storybook/**/*.tsx` を追加する(§3.3)。
-6. `biome.json` の `files.includes` に同じく `.storybook/**` を追加する(§3.5)。
-7. `.gitignore` に次を追加する。
+1. **`init` が `package.json` に加えた Storybook 関連の devDependencies / scripts を、§3.1 で決めたバージョン・記述に上書きし直す。** `init` は実行時点の最新バージョンを書き込むため、放置すると §3.1 の宣言と食い違う。バージョンはプロジェクト内で一元管理し、`storybook` と `@storybook/*` をすべて同一バージョンに保つ(§3.1 の「バージョンの揃え方」)必要があるため、唯一のソースは §3.1 の `package.json` 側に置く。上書きしたら `pnpm install` をやり直す。
+2. `.storybook/preview.ts` を **`.storybook/preview.tsx` に改名**する(デコレータや JSX を書けるようにするため)。
+3. `.storybook/main.ts` の `stories` グロブを `../src` 配下に限定する(§4.3.2)。
+4. スキャフォールドが生成したサンプル Story(`src/stories/` 等)を削除する。**Story は対象コンポーネントと同じディレクトリに置く**規約にするため(§4.3.5)。
+5. `@storybook/addon-a11y` / `@storybook/addon-docs` / `@storybook/addon-vitest` を導入し、`main.ts` の `addons` に並べる。
+6. `tsconfig.json` の `include` に `.storybook/**/*.ts` / `.storybook/**/*.tsx` を追加する(§3.3)。
+7. `biome.json` の `files.includes` に同じく `.storybook/**` を追加する(§3.5)。
+8. `.gitignore` に次を追加する。
 
    ```text
    *storybook.log
@@ -1214,7 +1223,7 @@ export const withPageFrame: Decorator = (Story) => (
 // - .storybook/main.ts の stories グロブは ../src 配下のみを対象にしているため、
 //   このファイル自体は Storybook の Story として読み込まれない。
 //
-// Display系コンポーネント用の Story テンプレート(CSF3)。
+// Display系コンポーネント用の Story テンプレート。記法は CSF3(Component Story Format 3)。
 // Display系は props のみで描画されるため、args の組み合わせを列挙するだけで
 // Story が完結する。ハンドラを渡さないため play 関数は基本的に不要。
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
@@ -1782,7 +1791,8 @@ axe は静的な DOM しか見ない。次はテンプレート末尾のコメ�
 ### 4.4.1 導入手順
 
 ```bash
-# コンテナ内で実行する
+# コンテナ内で実行する。ホストのシェルからは `docker compose exec app`(起動済み)か
+# `docker compose run --rm app`(単発)を前置する(§1.2 のモード B / C)。
 pnpm add -D @playwright/test playwright serve
 
 # ブラウザバイナリの取得(初回のみ。--with-deps は不要 — §2.2)
@@ -1791,10 +1801,11 @@ pnpm exec playwright install chromium
 
 `playwright.config.ts` を手で書く(`init` の対話は使わず、§4.4.2 の内容をコピーする)。あわせて次を整える。
 
-1. `e2e/` ディレクトリを作り、`helpers.ts` と `*.spec.ts` を置く。
-2. `biome.json` の `files.includes` に `e2e/**/*.ts` と、出力ディレクトリの除外を追加する(§3.5)。
-3. `vitest.config.ts` の `unit` project に `exclude: [..., "e2e/**"]` を追加する(§4.2)。**これを忘れると Vitest が Playwright のスペックを拾って壊れる。**
-4. `.gitignore` に次を追加する。
+1. **`pnpm add` が `package.json` に書いたバージョンを、§3.1 で決めた値に戻す。** §3.1 の `package.json` をそのまま使う場合は宣言済みなので、そもそもこの `add` は不要である。実行した場合は実行時点の最新バージョンが書き込まれ、`<PLAYWRIGHT_VER>` / `<SERVE_VER>` で決めた値を上書きしてしまう。Playwright のバージョンは `@playwright/test` と `playwright` を同一に保つ必要があり、さらに `docker/Dockerfile` の `playwright@<PLAYWRIGHT_VER> install-deps` とも揃える必要がある(§3.1 の「バージョンの揃え方」/ §5.6)ため、唯一のソースは §3.1 の `package.json` 側に置く。上書きしたら `pnpm install` をやり直す。
+2. `e2e/` ディレクトリを作り、`helpers.ts` と `*.spec.ts` を置く。
+3. `biome.json` の `files.includes` に `e2e/**/*.ts` と、出力ディレクトリの除外を追加する(§3.5)。
+4. `vitest.config.ts` の `unit` project に `exclude: [..., "e2e/**"]` を追加する(§4.2)。**これを忘れると Vitest が Playwright のスペックを拾って壊れる。**
+5. `.gitignore` に次を追加する。
 
    ```text
    # Playwright
@@ -1803,7 +1814,7 @@ pnpm exec playwright install chromium
    /blob-report/
    ```
 
-5. `package.json` に `test:e2e` / `test:e2e:only` / `serve:out` を追加する(§3.1)。
+6. `package.json` に `test:e2e` / `test:e2e:only` / `serve:out` を追加する(§3.1)。
 
 ### 4.4.2 `playwright.config.ts`
 
@@ -2117,7 +2128,7 @@ npm view @playwright/test version
 - **CI / 実行ターゲット**: **Active LTS** を推奨。
 - LTS の確認: `https://nodejs.org/en/about/previous-releases`(スケジュール)/ `https://nodejs.org/dist/index.json`(全リリース)。
 - 開発と CI で Node メジャーを揃えるか分けるかは、プロジェクトの実行ターゲットに合わせて決める(§2.6 の注記)。
-- **Node 25 以降は corepack が本体同梱でない** → Dockerfile で `npm install -g corepack@<VER>` が必要(§2.2)。
+- **Node 25 以降は corepack が本体同梱でない** → Dockerfile で `npm install -g corepack@<COREPACK_VER>` が必要(§2.2)。
 
 ### 5.3 corepack のバージョン
 
@@ -2171,7 +2182,7 @@ Playwright のバージョンは **3 箇所**に現れる。**Dependabot は npm
 | 箇所 | 何が書かれるか | 更新方法 |
 |---|---|---|
 | `package.json` の `@playwright/test` / `playwright` | ライブラリ本体 | Dependabot(npm)が PR を出す |
-| `docker/Dockerfile` の `npx -y playwright@<VER> install-deps chromium` | OS 依存ライブラリの導入元 | **手動**。Dependabot(docker)は `FROM` しか見ない |
+| `docker/Dockerfile` の `npx -y playwright@<PLAYWRIGHT_VER> install-deps chromium` | OS 依存ライブラリの導入元 | **手動**。Dependabot(docker)は `FROM` しか見ない |
 | `.github/workflows/ci.yml` の `pnpm exec playwright install --with-deps chromium` | CI でのブラウザ取得 | バージョンを書いていないので自動追随する |
 
 **Playwright を上げる PR では必ず Dockerfile も合わせる。** ずれると、イメージに入っている OS ライブラリが新しい Chromium の要求を満たさず、コンテナ内でだけ Story テストと E2E が起動に失敗する(CI では `--with-deps` が毎回入れ直すので通ってしまい、気付きにくい)。
@@ -2236,39 +2247,46 @@ grep -o 'playwright@[0-9.]*' docker/Dockerfile
 
 新規プロジェクトで上から順に実行する。
 
+**コンテナを先に立ち上げ、以降のセットアップコマンドはすべてその中で実行する。** ホストに Node / pnpm を入れないため(§0 の原則 1)、`pnpm` を使う手順はコンテナが動いていることが前提になる。
+
 1. [ ] リポジトリ作成。`<PROJECT>` 名と `/<PROJECT>` パスを決める。
 2. [ ] §5 で各ツールの最新安定版を調べ、採用バージョンを確定する。**揃えるべきグループ(§5.1 の表)に注意。**
-3. [ ] **第1部のファイルを配置**(`<PROJECT>` / `<NODE_MAJOR>` / `<COREPACK_VER>` / `<PLAYWRIGHT_VER>` を置換):
+3. [ ] **`package.json` を先に配置**(§3.1)。第1部の Dockerfile が `COPY package.json` → `corepack install` を行うため、**イメージのビルド時点で存在している必要がある**(§2.2)。第2部の残りのファイルは手順 6 に回す。
+4. [ ] **第1部のファイルを配置**(`<PROJECT>` / `<NODE_MAJOR>` / `<COREPACK_VER>` / `<PLAYWRIGHT_VER>` を置換):
    - [ ] `docker/Dockerfile`(§2.2。**`playwright install-deps` を消さない**)
    - [ ] `docker-compose.yml`(§2.3。ポート 3000 / `127.0.0.1:6006`)
    - [ ] `.devcontainer/devcontainer.json`(§2.4)
    - [ ] `pnpm-workspace.yaml`(§2.5)
    - [ ] `.github/workflows/ci.yml`(§2.6。**3 ジョブ**)、`.github/workflows/audit.yml`、`.github/dependabot.yml`
-4. [ ] **第2部のファイルを配置 or 差し替え**(アプリ層): `package.json` / `next.config.ts` / `tsconfig.json` / `postcss.config.mjs` / `biome.json`
+5. [ ] **初回ビルド&起動**: `docker compose up -d --build`。
+   - この時点ではアプリのソース(第2部の残り)がまだ無いので、`command` の `pnpm dev` は起動に失敗して終了しうる。ここで確かめるのは**イメージのビルドと `pnpm install` が通ること**まででよい。画面(`http://localhost:3000`)の確認は手順 10 で行う。
+   - 以降のコマンドは、起動済みコンテナに対しては `docker compose exec app <command>`(§1.2 のモード B)、コンテナが停止していても回せる単発実行は `docker compose run --rm app <command>`(モード C)を使う。
+   - VSCode 派は `Dev Containers: Reopen in Container`(モード A)。`overrideCommand: true` によりコンテナは待機状態で開くので、以降の手順は VSCode のターミナルで前置なしに実行できる。
+6. [ ] **第2部の残りのファイルを配置 or 差し替え**(アプリ層): `next.config.ts` / `tsconfig.json` / `postcss.config.mjs` / `biome.json`、および `src/` 一式
    - [ ] `tsconfig.json` の `include` に `.storybook/**` を追加したか(§3.3)
    - [ ] `biome.json` の `files.includes` に `.storybook/**` と `e2e/**` を追加したか(§3.5)
-5. [ ] **第3部のテスト層を配置**:
+7. [ ] **第3部のテスト層を配置**(`pnpm` を使う手順は起動済みコンテナ内で実行する):
    - [ ] `vitest.config.ts`(**2 project**)/ `vitest.setup.ts`(§4.2)
-   - [ ] Storybook: `pnpm dlx storybook@latest init` → `.storybook/main.ts` / `.storybook/preview.tsx` を §4.3.2 / §4.3.3 の内容に置換 → スキャフォールドのサンプル Story を削除(§4.3.1)
+   - [ ] Storybook: `docker compose exec app pnpm dlx storybook@latest init` → `init` が `package.json` に加えた Storybook 関連の devDependencies / scripts を §3.1 の内容へ戻す → `.storybook/main.ts` / `.storybook/preview.tsx` を §4.3.2 / §4.3.3 の内容に置換 → スキャフォールドのサンプル Story を削除(§4.3.1)
    - [ ] `.storybook/templates/display.stories.tsx` / `input.stories.tsx`(§4.3.5)
    - [ ] `.storybook/story-check-allowlist.txt` / `scripts/check-stories.sh`(§4.3.6)
-   - [ ] Playwright: `playwright.config.ts` / `e2e/helpers.ts` / `e2e/smoke.spec.ts`(§4.4)
+   - [ ] Playwright: `playwright.config.ts` / `e2e/helpers.ts` / `e2e/smoke.spec.ts`(§4.4)。依存は §3.1 の `package.json` で宣言済みなので追加インストールは不要。足す場合のみ `docker compose exec app pnpm add -D <pkg>`
    - [ ] `.gitignore` に `storybook-static` / `*storybook.log` / `/test-results/` / `/playwright-report/` / `/blob-report/` を追加
-6. [ ] GitHub Actions を SHA pin に更新(§5.4)。
-7. [ ] 初回ビルド&起動: `docker compose up -d --build` → `http://localhost:3000` を確認。
-   - VSCode 派は `Dev Containers: Reopen in Container` →(必要なら)`pnpm dev`。
 8. [ ] **ブラウザバイナリを取得**: `docker compose exec app pnpm exec playwright install chromium`(§2.2。`--with-deps` は不要)
-9. [ ] 動作確認(すべてコンテナ内 / `docker compose run --rm app` 経由):
-   - [ ] `pnpm check:ci` / `pnpm type-check`
-   - [ ] `pnpm test`(unit)
-   - [ ] `pnpm build`(Static Export)
-   - [ ] `pnpm build-storybook`
-   - [ ] `pnpm storybook` → `http://localhost:6006` が開く
-   - [ ] `pnpm test:storybook`(実ブラウザ)
-   - [ ] `pnpm test:e2e`(ビルド → 配信 → シナリオ)
-   - [ ] `pnpm check:stories`
-10. [ ] `README.md` と `CLAUDE.md` をプロジェクトに合わせて作成(本ガイドの内容を要約)。
-11. [ ] **PR は必ず Draft で作成**(運用ルール)。新規ブランチに upstream は設定しない。
+   - コンテナが停止していたら先に `docker compose up -d` で起動し直す。**`docker compose run --rm` では取らない** — `~/.cache/ms-playwright` は volume に載せていないため、使い捨てコンテナに入れたバイナリはそのまま消える(§2.3)。
+9. [ ] GitHub Actions を SHA pin に更新(§5.4)。
+10. [ ] 動作確認(すべて起動済みコンテナ内 / `docker compose exec app` 経由。ブラウザバイナリが手順 8 のコンテナにしか無いため、ここは `run --rm` を使わない):
+    - [ ] `pnpm check:ci` / `pnpm type-check`
+    - [ ] `pnpm test`(unit)
+    - [ ] `pnpm build`(Static Export)
+    - [ ] `pnpm build-storybook`
+    - [ ] `pnpm dev` → `http://localhost:3000` が開く
+    - [ ] `pnpm storybook` → `http://localhost:6006` が開く
+    - [ ] `pnpm test:storybook`(実ブラウザ)
+    - [ ] `pnpm test:e2e`(ビルド → 配信 → シナリオ)
+    - [ ] `pnpm check:stories`
+11. [ ] `README.md` と `CLAUDE.md` をプロジェクトに合わせて作成(本ガイドの内容を要約)。
+12. [ ] **PR は必ず Draft で作成**(運用ルール)。新規ブランチに upstream は設定しない。
 
 ---
 
@@ -2290,7 +2308,7 @@ grep -o 'playwright@[0-9.]*' docker/Dockerfile
 | 12 | Container 系の Story が空白になる | state 注入デコレータ(`withAppState` / `withAppProvider`)を付けているか確認する。Context を提供せずに Container を描画すると Provider 外参照で例外になる。付与していれば初回描画から state が入るので `findBy*` は不要(§4.3.4)。 |
 | 13 | E2E で「直したはずのバグが再現する」 | `out/` が古い。`test:e2e:only` ではなく `test:e2e`(`next build &&` 付き)を使う(§4.4.3)。 |
 | 14 | Vitest が Playwright のスペックを拾って壊れる | `vitest.config.ts` の `unit` project に `exclude: [...configDefaults.exclude, "e2e/**"]` を追加する(§4.2)。 |
-| 15 | コンテナ内でだけブラウザが起動しない(CI は通る) | Dockerfile の `playwright@<VER> install-deps` と `package.json` の `@playwright/test` のバージョンがずれている。CI は `--with-deps` で毎回入れ直すため気付きにくい(§5.6)。 |
+| 15 | コンテナ内でだけブラウザが起動しない(CI は通る) | Dockerfile の `playwright@<PLAYWRIGHT_VER> install-deps` と `package.json` の `@playwright/test` のバージョンがずれている。CI は `--with-deps` で毎回入れ直すため気付きにくい(§5.6)。 |
 | 16 | `pnpm install` がライフサイクルスクリプトの警告で止まる | `pnpm-workspace.yaml` の `onlyBuiltDependencies: []` による既定ブロック。**全部許可せず**、警告に出たパッケージ名だけを配列に追加する(§2.5)。 |
 | 17 | a11y 違反が警告のまま CI を通ってしまう | `preview.tsx` の `parameters.a11y.test` が既定の `"todo"` のまま。`"error"` にする。個別の例外は preview 全体ではなく**その Story の `parameters.a11y`** でルールを限定して無効化する(§4.3.7)。 |
 
